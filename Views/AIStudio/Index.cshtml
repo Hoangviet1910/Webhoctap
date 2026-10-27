@@ -1,0 +1,302 @@
+@model HoangViet.Models.AIStudioViewModel
+@{
+    ViewData["Title"] = "🤖 Phòng Mentor AI 2D - ViệtBot Trợ Giảng C#";
+}
+
+<div class="container-fluid py-4 px-3 px-lg-4" style="max-width: 1480px;">
+    <div class="row g-4 align-items-stretch" style="min-height: calc(100vh - 125px);">
+
+        <!-- ================= CỘT TRÁI (35%): NHÂN VẬT HOẠT ẢNH 2D VIỆTBOT LỚN & 3 CHẾ ĐỘ CHỌN NHANH ================= -->
+        <div class="col-lg-4 d-flex flex-column">
+            <div class="cp-section-card h-100 d-flex flex-column justify-content-between mb-0">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge rounded-pill px-3 py-2" style="background: rgba(249,115,22,0.18); color: #FB923C; border: 1px solid rgba(249,115,22,0.4);">
+                            <i class="bi bi-stars me-1"></i>VIỆTBOT 2D STUDIO
+                        </span>
+                        <span id="studioMoodBadge" class="badge bg-success bg-opacity-25 text-success px-3 py-2">
+                            <span class="spinner-grow spinner-grow-sm me-1" style="width: 7px; height: 7px;"></span>Sẵn sàng hỗ trợ
+                        </span>
+                    </div>
+
+                    <!-- Sân khấu Nhân vật hoạt ảnh 2D ViệtBot kích thước lớn -->
+                    <div class="studio-character-stage text-center py-4 my-2 rounded-4"
+                         style="background: radial-gradient(circle at center, rgba(249,115,22,0.16) 0%, rgba(15,23,42,0.92) 72%); border: 1px solid rgba(148,163,184,0.18);">
+                        <div class="studio-character-float d-inline-block position-relative">
+                            <svg viewBox="0 0 180 180" width="165" height="165" id="studioMascotSvg">
+                                <defs>
+                                    <linearGradient id="studioVisor" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#0F172A" />
+                                        <stop offset="100%" stop-color="#1E293B" />
+                                    </linearGradient>
+                                    <linearGradient id="studioSuit" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#F97316" />
+                                        <stop offset="100%" stop-color="#EA580C" />
+                                    </linearGradient>
+                                </defs>
+                                <!-- Vòng hào quang chuyển động -->
+                                <circle cx="90" cy="92" r="78" fill="rgba(15,23,42,0.85)" stroke="#F97316" stroke-width="3.5" stroke-dasharray="10 6" />
+                                <!-- Ăng-ten phát sáng -->
+                                <line x1="90" y1="12" x2="90" y2="34" stroke="#94A3B8" stroke-width="5" stroke-linecap="round" />
+                                <circle cx="90" cy="12" r="9" fill="#10B981" id="studioAntennaLight" />
+                                <!-- Mũ bảo hiểm 2D -->
+                                <rect x="36" y="34" width="108" height="86" rx="38" fill="#F8FAFC" stroke="#334155" stroke-width="4" />
+                                <!-- Tai nghe 2 bên -->
+                                <rect x="22" y="58" width="16" height="38" rx="8" fill="url(#studioSuit)" />
+                                <rect x="142" y="58" width="16" height="38" rx="8" fill="url(#studioSuit)" />
+                                <!-- Màn hình gương mặt kỹ thuật số -->
+                                <rect x="48" y="48" width="84" height="58" rx="24" fill="url(#studioVisor)" stroke="#38BDF8" stroke-width="3" />
+                                <!-- Đôi mắt biểu cảm -->
+                                <g id="studioMascotEyes">
+                                    <circle cx="70" cy="72" r="8.5" fill="#10B981" />
+                                    <circle cx="110" cy="72" r="8.5" fill="#10B981" />
+                                    <circle cx="73" cy="69" r="3" fill="#FFFFFF" />
+                                    <circle cx="113" cy="69" r="3" fill="#FFFFFF" />
+                                </g>
+                                <!-- Miệng biểu cảm -->
+                                <path id="studioMascotMouth" d="M 74 90 Q 90 101 106 90" stroke="#F97316" stroke-width="4.5" fill="none" stroke-linecap="round" />
+                                <!-- Thân áo C# 10 -->
+                                <path d="M 52 120 L 128 120 L 140 160 L 40 160 Z" fill="url(#studioSuit)" />
+                                <text x="90" y="147" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-weight="800" font-size="18">C# .NET 10</text>
+                            </svg>
+                        </div>
+
+                        <h2 class="h5 fw-bold text-white mt-2 mb-1">ViệtBot 2D - Trợ giảng C#</h2>
+                        <p id="studioExpressionText" class="small text-secondary mb-0 px-3">
+                            Đồng hành cùng Hoàng Việt đọc hiểu kiến trúc dự án, luyện phỏng vấn Intern và rà soát lỗi code C#.
+                        </p>
+                    </div>
+
+                    <!-- 3 Chế độ chọn nhanh -->
+                    <div class="mt-3">
+                        <div class="small fw-bold text-uppercase text-secondary mb-2 font-mono">
+                            <i class="bi bi-lightning-charge-fill text-warning me-1"></i>3 Chế độ huấn luyện nhanh
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn text-start p-3 rounded-3 studio-mode-btn"
+                                    onclick="window.HoangVietStudio.triggerMode('Phỏng vấn thử C# Intern', 'interview')">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="studio-mode-icon bg-warning bg-opacity-25 text-warning">
+                                        <i class="bi bi-person-workspace fs-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-white">Phỏng vấn thử C# Intern</div>
+                                        <div class="small text-secondary">Đặt câu hỏi thực chiến OOP, LINQ, EF Core, DI & gợi ý trả lời</div>
+                                    </div>
+                                </div>
+                            </button>
+
+                            <button type="button" class="btn text-start p-3 rounded-3 studio-mode-btn"
+                                    onclick="window.HoangVietStudio.triggerMode('Giải thích luồng bài tập lớn MVC', 'happy')">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="studio-mode-icon bg-info bg-opacity-25 text-info">
+                                        <i class="bi bi-diagram-3-fill fs-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-white">Giải thích luồng bài tập lớn MVC</div>
+                                        <div class="small text-secondary">Bóc tách đường đi từ Request ➔ Controller ➔ Service ➔ SQL</div>
+                                    </div>
+                                </div>
+                            </button>
+
+                            <button type="button" class="btn text-start p-3 rounded-3 studio-mode-btn"
+                                    onclick="window.HoangVietStudio.triggerMode('Review & Tìm lỗi đoạn code', 'thinking')">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="studio-mode-icon bg-success bg-opacity-25 text-success">
+                                        <i class="bi bi-bug-fill fs-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-white">Review & Tìm lỗi đoạn code</div>
+                                        <div class="small text-secondary">Phát hiện lỗi Null, N+1 Query, thiếu async/await & tối ưu Clean Code</div>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+                    <a asp-controller="Home" asp-action="Index" asp-route-track="INTERN_TRACK" class="btn btn-sm btn-hv-outline w-100">
+                        <i class="bi bi-arrow-left me-1"></i>Quay lại Bài học đang mở
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= CỘT PHẢI (65%): KHUNG TRÒ CHUYỆN TOÀN MÀN HÌNH RỘNG RÃI ================= -->
+        <div class="col-lg-8 d-flex flex-column">
+            <div class="cp-section-card h-100 d-flex flex-column justify-content-between mb-0">
+                <!-- Header khung trò chuyện -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 border-bottom border-secondary border-opacity-25">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fs-4">🤖</span>
+                        <div>
+                            <h1 class="h5 fw-bold text-white mb-0">Phòng Mentor AI 2D — Không Gian Trao Đổi Chuyên Sâu</h1>
+                            <div class="small text-secondary">Hỏi đáp trực tiếp về C#, OOP, SQL Server, EF Core, Web API & kinh nghiệm đi thực tập</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-hv-outline" onclick="window.HoangVietStudio.clearHistory()">
+                        <i class="bi bi-trash3 me-1"></i>Làm mới cuộc trò chuyện
+                    </button>
+                </div>
+
+                <!-- Danh sách tin nhắn hội thoại -->
+                <div id="studioChatMessages" class="flex-grow-1 py-3 px-2 my-2 overflow-auto" style="max-height: 62vh; min-height: 380px;">
+                    <div class="studio-msg-row assistant mb-3">
+                        <div class="studio-msg-bubble assistant">
+                            <div class="fw-bold text-warning small mb-1">
+                                <i class="bi bi-robot me-1"></i>ViệtBot 2D - Trợ giảng C#
+                            </div>
+                            <div>
+                                Chào <strong>Hoàng Việt</strong>! Chào mừng bạn đến với <strong>Phòng Mentor AI 2D</strong>.<br />
+                                Bạn có thể bấm vào <strong>1 trong 3 chế độ bên cột trái</strong> (<em>Phỏng vấn thử C# Intern</em>, <em>Giải thích luồng bài tập lớn MVC</em>, <em>Review & Tìm lỗi đoạn code</em>) hoặc nhập trực tiếp câu hỏi / đoạn code C# xuống bên dưới để mình phân tích chi tiết nhé!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Khung nhập câu hỏi toàn màn hình -->
+                <form onsubmit="window.HoangVietStudio.sendMessage(event)" class="pt-3 border-top border-secondary border-opacity-25">
+                    <div class="input-group">
+                        <input type="text"
+                               id="studioChatInput"
+                               class="form-control bg-dark text-light border-secondary py-2 px-3"
+                               placeholder="Nhập câu hỏi cho ChatBot..."
+                               style="font-size: 16px; border-radius: 10px 0 0 10px;" />
+                        <button type="submit" id="studioSendBtn" class="btn btn-hv-orange px-4 fw-bold" style="border-radius: 0 10px 10px 0;">
+                            <i class="bi bi-send-fill me-1"></i>Gửi câu hỏi
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        window.HoangVietStudio = {
+            setMood: function (mood) {
+                const badge = document.getElementById('studioMoodBadge');
+                const expText = document.getElementById('studioExpressionText');
+                const mouth = document.getElementById('studioMascotMouth');
+
+                if (mood === 'interview') {
+                    if (badge) {
+                        badge.className = 'badge bg-warning text-dark px-3 py-2 fw-bold';
+                        badge.innerHTML = '<i class="bi bi-mic-fill me-1"></i>Chế độ Phỏng vấn Intern';
+                    }
+                    if (expText) expText.textContent = 'Đang đóng vai Senior .NET Tech Lead phỏng vấn thực tập sinh Hoàng Việt.';
+                    if (mouth) mouth.setAttribute('d', 'M 74 92 Q 90 98 106 92');
+                } else if (mood === 'thinking') {
+                    if (badge) {
+                        badge.className = 'badge bg-info text-dark px-3 py-2 fw-bold';
+                        badge.innerHTML = '<i class="bi bi-search me-1"></i>Đang rà soát & phân tích Code';
+                    }
+                    if (expText) expText.textContent = 'Đang soi từng mắt xích C# để tìm lỗi Null, hiệu năng LINQ và kiến trúc.';
+                    if (mouth) mouth.setAttribute('d', 'M 76 93 L 104 93');
+                } else {
+                    if (badge) {
+                        badge.className = 'badge bg-success bg-opacity-25 text-success px-3 py-2';
+                        badge.innerHTML = '<span class="spinner-grow spinner-grow-sm me-1" style="width: 7px; height: 7px;"></span>Đang giảng giải luồng C#';
+                    }
+                    if (expText) expText.textContent = 'Đồng hành cùng Hoàng Việt đọc hiểu kiến trúc dự án, luyện phỏng vấn Intern và rà soát lỗi code C#.';
+                    if (mouth) mouth.setAttribute('d', 'M 74 90 Q 90 103 106 90');
+                }
+            },
+
+            triggerMode: function (modePrompt, mood) {
+                this.setMood(mood);
+                this.appendMessage('user', modePrompt);
+                this.fetchReply(modePrompt);
+            },
+
+            sendMessage: function (e) {
+                if (e) e.preventDefault();
+                const input = document.getElementById('studioChatInput');
+                if (!input || !input.value.trim()) return;
+                const text = input.value.trim();
+                input.value = '';
+                this.appendMessage('user', text);
+                this.fetchReply(text);
+            },
+
+            appendMessage: function (role, htmlOrText) {
+                const container = document.getElementById('studioChatMessages');
+                if (!container) return;
+
+                const row = document.createElement('div');
+                row.className = `studio-msg-row ${role} mb-3`;
+
+                if (role === 'user') {
+                    row.innerHTML = `
+                        <div class="studio-msg-bubble user">
+                            <div class="fw-bold text-info small mb-1"><i class="bi bi-person-circle me-1"></i>Hoàng Việt</div>
+                            <div>${htmlOrText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+                        </div>`;
+                } else {
+                    row.innerHTML = `
+                        <div class="studio-msg-bubble assistant">
+                            <div class="fw-bold text-warning small mb-1"><i class="bi bi-robot me-1"></i>ViệtBot 2D - Trợ giảng C#</div>
+                            <div>${htmlOrText}</div>
+                        </div>`;
+                }
+
+                container.appendChild(row);
+                container.scrollTop = container.scrollHeight;
+            },
+
+            formatReply: function (raw) {
+                if (!raw) return '';
+                return raw
+                    .replace(/```csharp([\s\S]*?)```/g, '<pre class="bg-black text-info p-3 rounded-3 mt-2 mb-2 font-mono" style="font-size:0.88rem;"><code>$1</code></pre>')
+                    .replace(/```([\s\S]*?)```/g, '<pre class="bg-black text-info p-3 rounded-3 mt-2 mb-2 font-mono" style="font-size:0.88rem;"><code>$1</code></pre>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/`([^`]+)`/g, '<code class="text-warning">$1</code>')
+                    .replace(/\n/g, '<br/>');
+            },
+
+            fetchReply: async function (question) {
+                const btn = document.getElementById('studioSendBtn');
+                if (btn) btn.disabled = true;
+
+                try {
+                    const res = await fetch('/AIStudio/AskMentor', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            message: question,
+                            lessonCode: 'Studio',
+                            lessonTitle: 'Phòng Mentor AI 2D',
+                            activeStepTitle: 'Trao đổi chuyên sâu'
+                        })
+                    });
+                    const data = await res.json();
+                    if (data && data.reply) {
+                        if (data.mood) this.setMood(data.mood);
+                        this.appendMessage('assistant', this.formatReply(data.reply));
+                    }
+                } catch {
+                    this.appendMessage('assistant', 'Hiện chưa thể kết nối, bạn hãy thử bấm lại câu hỏi nhé!');
+                } finally {
+                    if (btn) btn.disabled = false;
+                }
+            },
+
+            clearHistory: function () {
+                const container = document.getElementById('studioChatMessages');
+                if (!container) return;
+                container.innerHTML = `
+                    <div class="studio-msg-row assistant mb-3">
+                        <div class="studio-msg-bubble assistant">
+                            <div class="fw-bold text-warning small mb-1">
+                                <i class="bi bi-robot me-1"></i>ViệtBot 2D - Trợ giảng C#
+                            </div>
+                            <div>Cuộc trò chuyện đã được làm mới. Hãy chọn một chế độ bên trái hoặc nhập câu hỏi mới cho ViệtBot nhé!</div>
+                        </div>
+                    </div>`;
+            }
+        };
+    </script>
+}

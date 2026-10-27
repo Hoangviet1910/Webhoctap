@@ -1,0 +1,250 @@
+@model HoangViet.Models.StatsViewModel
+@using System.Text.Json
+@{
+    ViewData["Title"] = "Bảng Thống Kê Năng Lực & Tiến Độ";
+}
+
+<div class="container-fluid py-4 px-3 px-lg-5" style="max-width: 1440px;">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <span class="badge bg-warning text-dark font-mono fw-bold mb-1">COMPETENCY ANALYTICS</span>
+            <h1 class="h3 fw-bold text-white mb-1">Bảng Thống Kê Năng Lực & Tiến Độ Học Tập — Hoàng Việt</h1>
+            <p class="text-secondary mb-0">
+                Toàn bộ 6 nhóm kỹ năng khởi đầu ở mức <strong>0%</strong> và tăng dần theo thời gian thực khi bạn hoàn thành bài tập ở từng Bài học con.
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-controller="Home" asp-action="Index" asp-route-track="INTERN_TRACK" class="btn btn-hv-orange">
+                <i class="bi bi-play-circle-fill me-1"></i>Quay lại Học tập
+            </a>
+            <form asp-controller="Home" asp-action="ResetProgress" method="post"
+                  onsubmit="return confirm('Bạn có chắc chắn muốn đặt lại toàn bộ tiến độ và điểm năng lực về 0%?');">
+                <button type="submit" class="btn btn-hv-outline">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>Reset về 0%
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3 Thẻ Tóm tắt Tiến độ 2 Menu -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="cp-section-card h-100 mb-0">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-secondary small fw-semibold">TỔNG TIẾN ĐỘ HỆ THỐNG</span>
+                    <span class="badge bg-success font-mono">@Model.OverallProgressPercent%</span>
+                </div>
+                <div class="h2 fw-bold text-white font-mono mb-2">
+                    @Model.CompletedLessonsCount / @Model.TotalLessonsCount <span class="fs-6 text-secondary">bài học con</span>
+                </div>
+                <div class="progress" style="height: 8px; background: #0F172A;">
+                    <div class="progress-bar" style="width: @(Model.OverallProgressPercent)%; background: linear-gradient(90deg, #F97316, #10B981);"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="cp-section-card h-100 mb-0">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-warning small fw-semibold">MENU 1: LỘ TRÌNH ĐI THỰC TẬP (5 CHỦ ĐỀ)</span>
+                    <i class="bi bi-lightning-charge-fill text-warning"></i>
+                </div>
+                <div class="h2 fw-bold text-white font-mono mb-2">
+                    @Model.InternTrackCompleted / @Model.InternTrackTotal <span class="fs-6 text-secondary">bài học con</span>
+                </div>
+                <a asp-controller="Home" asp-action="Index" asp-route-track="INTERN_TRACK" class="small text-warning text-decoration-none">
+                    Mở Lộ trình Thực tập <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="cp-section-card h-100 mb-0">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-info small fw-semibold">MENU 2: LỘ TRÌNH HỌC CHI TIẾT (16 CHỦ ĐỀ)</span>
+                    <i class="bi bi-journal-bookmark-fill text-info"></i>
+                </div>
+                <div class="h2 fw-bold text-white font-mono mb-2">
+                    @Model.DetailedTrackCompleted / @Model.DetailedTrackTotal <span class="fs-6 text-secondary">bài học con</span>
+                </div>
+                <a asp-controller="Home" asp-action="Index" asp-route-track="DETAILED_TRACK" class="small text-info text-decoration-none">
+                    Mở Lộ trình Chi tiết 16 Chủ đề <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hàng Biểu đồ: Mạng nhện (Radar) + Ô tròn (Doughnut) + Biểu đồ Đường (Timeline Line Chart) -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-4">
+            <div class="cp-section-card h-100 mb-0">
+                <h2 class="h6 fw-bold text-white mb-3">
+                    <i class="bi bi-diagram-3-fill text-warning me-2"></i>1. Biểu đồ Mạng Nhện (Radar Chart - 6 Kỹ Năng)
+                </h2>
+                <div style="height: 300px; position: relative;">
+                    <canvas id="statsRadarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="cp-section-card h-100 mb-0">
+                <h2 class="h6 fw-bold text-white mb-3">
+                    <i class="bi bi-pie-chart-fill text-info me-2"></i>2. Biểu đồ Ô Tròn (Doughnut Chart - Tỷ Trọng Kỹ Năng)
+                </h2>
+                <div style="height: 300px; position: relative;">
+                    <canvas id="statsDoughnutChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="cp-section-card h-100 mb-0">
+                <h2 class="h6 fw-bold text-white mb-3">
+                    <i class="bi bi-graph-up-arrow text-success me-2"></i>3. Biểu đồ Đường Theo Ngày Học (Timeline Line Chart)
+                </h2>
+                <div style="height: 300px; position: relative;">
+                    <canvas id="statsTimelineChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chi tiết từng nhóm kỹ năng -->
+    <div class="cp-section-card">
+        <h2 class="h5 fw-bold text-white mb-3">Chi tiết 6 nhóm năng lực C# Fullstack .NET 10</h2>
+        <div class="row g-3">
+            @foreach (var skill in Model.SkillMetrics)
+            {
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3" style="background: #0F172A; border: 1px solid rgba(148,163,184,0.16);">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-bold text-white">@skill.SkillName</span>
+                            <span class="font-mono fw-bold @(skill.CurrentScore > 0 ? "text-success" : "text-secondary")">
+                                @skill.CurrentScore / @skill.MaxScore điểm (@skill.CurrentScore%)
+                            </span>
+                        </div>
+                        <div class="progress" style="height: 10px; background: #1E293B;">
+                            <div class="progress-bar"
+                                 role="progressbar"
+                                 style="width: @(skill.CurrentScore)%; background: linear-gradient(90deg, #F97316, #10B981);">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const labels = @Html.Raw(JsonSerializer.Serialize(Model.SkillMetrics.Select(s => s.SkillName)));
+            const scores = @Html.Raw(JsonSerializer.Serialize(Model.SkillMetrics.Select(s => s.CurrentScore)));
+            const timelineLabels = @Html.Raw(JsonSerializer.Serialize(Model.TimelinePoints.Select(t => t.DateLabel)));
+            const timelineCounts = @Html.Raw(JsonSerializer.Serialize(Model.TimelinePoints.Select(t => t.CompletedLessonsCount)));
+
+            // 1. Radar Chart
+            const radarCtx = document.getElementById('statsRadarChart');
+            if (radarCtx && window.Chart) {
+                new Chart(radarCtx, {
+                    type: 'radar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Điểm năng lực hiện tại (%)',
+                            data: scores,
+                            backgroundColor: 'rgba(249, 115, 22, 0.22)',
+                            borderColor: '#F97316',
+                            pointBackgroundColor: '#10B981',
+                            pointBorderColor: '#fff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                min: 0,
+                                max: 100,
+                                ticks: { stepSize: 20, color: '#94A3B8', backdropColor: 'transparent' },
+                                grid: { color: 'rgba(148, 163, 184, 0.2)' },
+                                angleLines: { color: 'rgba(148, 163, 184, 0.2)' },
+                                pointLabels: { color: '#F8FAFC', font: { size: 12, weight: '600' } }
+                            }
+                        },
+                        plugins: { legend: { labels: { color: '#E2E8F0' } } }
+                    }
+                });
+            }
+
+            // 2. Doughnut Chart (Nếu tất cả đều 0% thì hiển thị vòng tròn chờ khởi động đẹp mắt)
+            const doughnutCtx = document.getElementById('statsDoughnutChart');
+            if (doughnutCtx && window.Chart) {
+                const allZero = scores.every(s => s === 0);
+                new Chart(doughnutCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: allZero ? ['Chưa hoàn thành bài tập (0%)'] : labels,
+                        datasets: [{
+                            data: allZero ? [100] : scores,
+                            backgroundColor: allZero
+                                ? ['rgba(148, 163, 184, 0.2)']
+                                : ['#F97316', '#10B981', '#38BDF8', '#A855F7', '#EAB308', '#EC4899'],
+                            borderColor: '#0F172A',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '62%',
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: '#E2E8F0', boxWidth: 12 } }
+                        }
+                    }
+                });
+            }
+
+            // 3. Timeline Line Chart
+            const lineCtx = document.getElementById('statsTimelineChart');
+            if (lineCtx && window.Chart) {
+                new Chart(lineCtx, {
+                    type: 'line',
+                    data: {
+                        labels: timelineLabels,
+                        datasets: [{
+                            label: 'Số bài học & bài tập hoàn thành',
+                            data: timelineCounts,
+                            borderColor: '#10B981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.18)',
+                            fill: true,
+                            tension: 0.35,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#F97316'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                suggestedMax: 5,
+                                ticks: { stepSize: 1, color: '#94A3B8' },
+                                grid: { color: 'rgba(148, 163, 184, 0.15)' }
+                            },
+                            x: {
+                                ticks: { color: '#CBD5E1' },
+                                grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                            }
+                        },
+                        plugins: { legend: { labels: { color: '#E2E8F0' } } }
+                    }
+                });
+            }
+        });
+    </script>
+}

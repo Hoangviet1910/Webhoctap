@@ -1,0 +1,1047 @@
+:root {
+    --bg-primary: #0F172A;
+    --bg-secondary: #1E293B;
+    --bg-elevated: #263449;
+    --accent-orange: #F97316;
+    --accent-green: #10B981;
+    --accent-blue: #38BDF8;
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --border-subtle: rgba(148, 163, 184, 0.18);
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body.minimalist-course-body {
+    margin: 0;
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+}
+
+.font-mono {
+    font-family: var(--font-mono) !important;
+}
+
+/* ================= TOP HEADER ================= */
+.cp-top-header {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    min-height: 68px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 0.5rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.cp-brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--text-main);
+}
+
+.cp-brand-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent-orange), #EA580C);
+    color: #fff;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
+}
+
+.cp-brand-name {
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
+
+.cp-brand-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.cp-track-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--bg-secondary);
+    padding: 0.3rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+}
+
+.cp-track-tab {
+    text-decoration: none;
+    color: #CBD5E1;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.48rem 0.95rem;
+    border-radius: 9px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.cp-track-tab:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.cp-track-tab.active {
+    background: linear-gradient(135deg, var(--accent-orange), #EA580C);
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(249, 115, 22, 0.35);
+}
+
+.cp-overall-progress-box {
+    min-width: 195px;
+    flex-direction: column;
+    background: var(--bg-secondary);
+    padding: 0.38rem 0.75rem;
+    border-radius: 10px;
+    border: 1px solid var(--border-subtle);
+}
+
+.btn-hv-orange {
+    background: linear-gradient(135deg, var(--accent-orange), #EA580C);
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    font-weight: 600;
+}
+
+.btn-hv-orange:hover {
+    background: linear-gradient(135deg, #FB923C, var(--accent-orange));
+    color: #fff;
+}
+
+.btn-hv-green {
+    background: linear-gradient(135deg, var(--accent-green), #059669);
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    font-weight: 600;
+}
+
+.btn-hv-green:hover {
+    background: linear-gradient(135deg, #34D399, var(--accent-green));
+    color: #fff;
+}
+
+.btn-hv-outline {
+    background: var(--bg-secondary);
+    color: #E2E8F0;
+    border: 1px solid var(--border-subtle);
+    border-radius: 9px;
+    font-weight: 600;
+}
+
+.btn-hv-outline:hover {
+    border-color: var(--accent-orange);
+    color: #fff;
+}
+
+/* ================= MAIN COURSE PLAYER GRID ================= */
+.cp-layout-grid {
+    display: grid;
+    grid-template-columns: 370px 1fr;
+    min-height: calc(100vh - 69px);
+}
+
+@media (max-width: 991.98px) {
+    .cp-layout-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ================= SIDEBAR ACCORDION (CHỦ ĐỀ -> BÀI HỌC CON) ================= */
+.cp-sidebar {
+    background: #131D31;
+    border-right: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 69px);
+    position: sticky;
+    top: 69px;
+    overflow-y: auto;
+}
+
+@media (max-width: 991.98px) {
+    .cp-sidebar {
+        height: auto;
+        max-height: 440px;
+        position: static;
+    }
+}
+
+.cp-sidebar-header {
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    background: rgba(15, 23, 42, 0.65);
+}
+
+.cp-topic-accordion {
+    flex: 1;
+}
+
+.cp-accordion-item {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+}
+
+.cp-accordion-btn {
+    background: #162138 !important;
+    color: var(--text-main) !important;
+    padding: 0.85rem 1rem !important;
+    box-shadow: none !important;
+}
+
+.cp-accordion-btn:not(.collapsed) {
+    background: #1E293B !important;
+    border-left: 3px solid var(--accent-orange);
+}
+
+.cp-topic-title-text {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #F8FAFC;
+    line-height: 1.4;
+}
+
+.cp-sublesson-list {
+    display: flex;
+    flex-direction: column;
+    background: #0F172A;
+}
+
+.cp-sublesson-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 0.72rem 1rem;
+    text-decoration: none;
+    color: #CBD5E1;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+    border-left: 3px solid transparent;
+    transition: all 0.15s ease;
+}
+
+.cp-sublesson-link:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+}
+
+.cp-sublesson-link.active {
+    background: rgba(249, 115, 22, 0.14);
+    border-left-color: var(--accent-orange);
+    color: #fff;
+}
+
+.cp-sublesson-title {
+    font-size: 0.86rem;
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+.cp-sidebar-footer {
+    padding: 0.85rem 1rem;
+    border-top: 1px solid var(--border-subtle);
+    background: rgba(15, 23, 42, 0.85);
+}
+
+/* ================= MAIN STAGE & LESSON CARDS ================= */
+.cp-main-stage {
+    padding: 1.75rem 2rem 5rem;
+    background: var(--bg-primary);
+}
+
+@media (max-width: 767.98px) {
+    .cp-main-stage {
+        padding: 1rem;
+    }
+}
+
+.cp-lesson-container {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.cp-lesson-header-card {
+    background: linear-gradient(145deg, #1E293B, #152033);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+.cp-lesson-main-title {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.35;
+}
+
+.cp-section-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.cp-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.cp-section-number {
+    background: linear-gradient(135deg, var(--accent-orange), #EA580C);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 0.78rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+.cp-section-title {
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* ================= PHẦN 1: VISUAL BENTO CARDS LÝ THUYẾT (16PX, LINE-HEIGHT 1.8, GAP 20PX, PADDING 24PX) ================= */
+.cp-theory-content {
+    font-size: 16px;
+    color: #E2E8F0;
+    line-height: 1.8;
+}
+
+.hv-bento-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hv-bento-card {
+    background: rgba(15, 23, 42, 0.72);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-left: 4px solid #38BDF8;
+    border-radius: 14px;
+    padding: 24px;
+    font-size: 16px;
+    line-height: 1.8;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.hv-bento-card:hover {
+    border-color: rgba(148, 163, 184, 0.36);
+}
+
+/* 1. Khối 💡 Bản chất / Ẩn dụ (Analogy Box) */
+.hv-bento-card.bento-card-analogy {
+    background: rgba(59, 130, 246, 0.1);
+    border-left: 4px solid #3B82F6;
+}
+
+/* 2. Khối 🖼️ Sơ đồ Cấu trúc Bộ nhớ (Visual Memory Diagram) */
+.hv-bento-card.bento-card-diagram {
+    background: rgba(15, 23, 42, 0.88);
+    border-left: 4px solid #10B981;
+}
+
+/* 3. Khối 📊 Phân tích Chuyên sâu & Bảng So sánh (Deep-Dive Cards & Tables) */
+.hv-bento-card.bento-card-deepdive {
+    background: rgba(30, 41, 59, 0.65);
+    border-left: 4px solid #38BDF8;
+}
+
+/* 4. Khối 🔍 Giải phẫu Cú pháp (Code Anatomy) */
+.hv-bento-card.bento-card-anatomy {
+    background: rgba(139, 92, 246, 0.1);
+    border-left: 4px solid #8B5CF6;
+}
+
+/* 5. Khối ⚠️ Bẫy Hay Gặp & Kinh Nghiệm Đi Làm (Warning Callout) */
+.hv-bento-card.bento-card-warning {
+    background: rgba(249, 115, 22, 0.1);
+    border-left: 4px solid #F97316;
+}
+
+.hv-bento-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.hv-bento-badge {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #CBD5E1;
+}
+
+.bento-card-analogy .hv-bento-badge {
+    background: rgba(59, 130, 246, 0.22);
+    color: #93C5FD;
+}
+
+.bento-card-diagram .hv-bento-badge {
+    background: rgba(16, 185, 129, 0.22);
+    color: #6EE7B7;
+}
+
+.bento-card-anatomy .hv-bento-badge {
+    background: rgba(139, 92, 246, 0.24);
+    color: #C4B5FD;
+}
+
+.bento-card-warning .hv-bento-badge {
+    background: rgba(249, 115, 22, 0.24);
+    color: #FDBA74;
+}
+
+.hv-bento-title {
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.5;
+}
+
+.hv-bento-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #F1F5F9;
+}
+
+.hv-theory-item {
+    padding: 4px 0;
+}
+
+.hv-theory-subitem {
+    padding: 4px 0 4px 18px;
+    border-left: 2px solid rgba(148, 163, 184, 0.22);
+    margin-left: 6px;
+    color: #E2E8F0;
+}
+
+.hv-bullet-dot {
+    color: #38BDF8;
+    font-weight: 800;
+    margin-right: 4px;
+}
+
+.hv-bullet-plus {
+    color: #F97316;
+    font-weight: 800;
+    margin-right: 4px;
+}
+
+.hv-step-num-pill {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: 0.84rem;
+    color: #FBBF24;
+    background: rgba(245, 158, 11, 0.16);
+    padding: 1px 8px;
+    border-radius: 6px;
+    margin-right: 4px;
+}
+
+.hv-text-strong {
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.hv-text-em {
+    color: #FDE68A;
+    font-style: italic;
+}
+
+.hv-inline-code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #FDBA74;
+    background: rgba(249, 115, 22, 0.16);
+    border: 1px solid rgba(249, 115, 22, 0.32);
+    padding: 2px 7px;
+    border-radius: 6px;
+}
+
+.hv-inline-arrow {
+    color: #10B981;
+    font-weight: 800;
+    padding: 0 2px;
+}
+
+/* Sơ đồ bộ nhớ trực quan (<pre class="memory-diagram">) */
+.hv-memory-diagram-wrap {
+    margin: 6px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    background: #070D19;
+}
+
+.hv-memory-diagram-header {
+    background: rgba(16, 185, 129, 0.14);
+    color: #6EE7B7;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+pre.memory-diagram {
+    margin: 0;
+    padding: 18px 20px;
+    background: #070D19;
+    color: #38BDF8;
+    font-family: var(--font-mono);
+    font-size: 14.5px;
+    line-height: 1.65;
+    overflow-x: auto;
+    white-space: pre;
+}
+
+/* Bảng so sánh hiện đại (hv-bento-table) */
+.hv-table-wrapper {
+    margin: 6px 0;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    overflow: hidden;
+}
+
+.hv-bento-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15.5px;
+    line-height: 1.65;
+    background: #0B1324;
+}
+
+.hv-bento-table thead tr {
+    background: linear-gradient(90deg, #1E293B, #162238);
+    border-bottom: 2px solid rgba(249, 115, 22, 0.5);
+}
+
+.hv-bento-table th {
+    padding: 13px 16px;
+    color: #FFFFFF;
+    font-weight: 700;
+    text-align: left;
+    border-right: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.hv-bento-table td {
+    padding: 12px 16px;
+    color: #E2E8F0;
+    border-top: 1px solid rgba(148, 163, 184, 0.14);
+    border-right: 1px solid rgba(148, 163, 184, 0.1);
+    vertical-align: top;
+}
+
+.hv-bento-table tbody tr:nth-child(even) {
+    background: rgba(30, 41, 59, 0.42);
+}
+
+.hv-bento-table tbody tr:hover {
+    background: rgba(56, 189, 248, 0.08);
+}
+
+/* ================= PHẦN 2: HỘP BƯỚC TƯƠNG TÁC (INTERACTIVE FLOW STEP BOXES - 16PX) ================= */
+.interactive-flow-chain {
+    display: flex;
+    align-items: stretch;
+    gap: 0.65rem;
+    margin-bottom: 1.35rem;
+    flex-wrap: wrap;
+}
+
+.flow-step-box {
+    flex: 1 1 200px;
+    background: #0F172A;
+    border: 2px solid rgba(148, 163, 184, 0.25);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    text-align: left;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.flow-step-box:hover {
+    border-color: var(--accent-orange);
+    transform: translateY(-2px);
+    background: #162238;
+}
+
+.flow-step-box.active {
+    background: linear-gradient(145deg, rgba(249, 115, 22, 0.2), rgba(16, 185, 129, 0.12));
+    border-color: var(--accent-orange);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.22), 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.flow-step-badge {
+    display: inline-block;
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 800;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: rgba(249, 115, 22, 0.2);
+    color: #FB923C;
+    margin-bottom: 0.5rem;
+}
+
+.flow-step-box.active .flow-step-badge {
+    background: var(--accent-orange);
+    color: #fff;
+}
+
+.flow-step-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.45;
+    margin-bottom: 0.55rem;
+}
+
+.flow-step-hint {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.flow-step-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-orange);
+    font-size: 1.45rem;
+    padding: 0 0.1rem;
+}
+
+@media (max-width: 767.98px) {
+    .flow-step-arrow {
+        display: none;
+    }
+}
+
+.flow-step-inspector {
+    background: #0F172A;
+    border: 1px solid rgba(249, 115, 22, 0.35);
+    border-radius: 14px;
+    padding: 1.25rem;
+}
+
+.flow-detail-panel {
+    background: #162138;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.flow-detail-structured {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.hv-flow-stage-card {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-left: 4px solid #38BDF8;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 15.5px;
+    line-height: 1.7;
+}
+
+.hv-flow-stage-card.stage-input {
+    border-left-color: #38BDF8;
+    background: rgba(56, 189, 248, 0.08);
+}
+
+.hv-flow-stage-card.stage-process {
+    border-left-color: #F97316;
+    background: rgba(249, 115, 22, 0.08);
+}
+
+.hv-flow-stage-card.stage-output {
+    border-left-color: #10B981;
+    background: rgba(16, 185, 129, 0.08);
+}
+
+.hv-flow-stage-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 4px;
+    color: #FFFFFF;
+}
+
+.stage-input .hv-flow-stage-label { color: #7DD3FC; }
+.stage-process .hv-flow-stage-label { color: #FDBA74; }
+.stage-output .hv-flow-stage-label { color: #6EE7B7; }
+
+.hv-flow-stage-body {
+    color: #F1F5F9;
+    font-size: 15.5px;
+    line-height: 1.7;
+}
+
+.flow-code-panel {
+    background: #0B1120;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.flow-code-header {
+    background: #162033;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.code-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.flow-code-pre {
+    padding: 1.15rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: #E2E8F0;
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+/* C# Syntax Highlighting Colors */
+.cs-kw { color: #FF7B72; font-weight: 700; }
+.cs-type { color: #38BDF8; font-weight: 600; }
+.cs-str { color: #A5D6FF; }
+.cs-num { color: #FDBA74; }
+.cs-comment { color: #6EE7B7; font-style: italic; }
+
+/* Giải thích từng dòng Code C# (Code Anatomy Panel) */
+.flow-code-anatomy-panel {
+    background: #0F172A;
+    padding: 14px 16px;
+    flex: 1;
+}
+
+.hv-code-anatomy-header {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #F8FAFC;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 10px;
+}
+
+.hv-code-anatomy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hv-code-anatomy-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(30, 41, 59, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+.hv-code-line-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #FBBF24;
+    background: rgba(245, 158, 11, 0.15);
+    padding: 2px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    margin-top: 2px;
+}
+
+.hv-code-anatomy-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.hv-code-anatomy-snippet {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: #38BDF8;
+    word-break: break-word;
+}
+
+.hv-code-anatomy-desc {
+    font-size: 0.88rem;
+    color: #CBD5E1;
+    margin-top: 2px;
+    line-height: 1.5;
+}
+
+/* ================= PHẦN 3: BÀI TẬP KIỂM TRA ================= */
+.cp-quiz-question-box {
+    background: #0F172A;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+}
+
+.cp-quiz-options-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+
+.cp-quiz-option-card {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background: #0F172A;
+    border: 2px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 0.9rem 1.15rem;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    margin: 0;
+}
+
+.cp-quiz-option-card:hover {
+    border-color: var(--accent-blue);
+    background: #162238;
+}
+
+.cp-quiz-option-card.selected {
+    border-color: var(--accent-orange);
+    background: rgba(249, 115, 22, 0.14);
+}
+
+.cp-quiz-option-card.correct {
+    border-color: var(--accent-green);
+    background: rgba(16, 185, 129, 0.16);
+}
+
+.cp-quiz-option-card.wrong {
+    border-color: #EF4444;
+    background: rgba(239, 68, 68, 0.15);
+}
+
+.cp-quiz-letter {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #1E293B;
+    color: var(--accent-orange);
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cp-quiz-option-text {
+    font-size: 16px;
+    color: #F8FAFC;
+}
+
+/* ================= CHART BOXES ================= */
+.cp-chart-box {
+    background: #0F172A;
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 1.15rem;
+}
+
+/* ================= FLOATING 2D AI MASCOT WIDGET ================= */
+.ai-mascot-floating-dock {
+    position: fixed;
+    right: 22px;
+    bottom: 20px;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.mascot-speech-bubble {
+    width: 370px;
+    max-width: calc(100vw - 36px);
+    background: rgba(15, 23, 42, 0.97);
+    border: 1px solid rgba(249, 115, 22, 0.45);
+    border-radius: 16px;
+    padding: 0.95rem 1.05rem;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+}
+
+.mascot-speech-bubble.collapsed-bubble {
+    display: none;
+}
+
+.mascot-quick-btn {
+    background: rgba(30, 41, 59, 0.9);
+    color: #E2E8F0;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    font-size: 0.78rem;
+    transition: all 0.15s ease;
+}
+
+.mascot-quick-btn:hover {
+    background: rgba(249, 115, 22, 0.18);
+    border-color: var(--accent-orange);
+    color: #fff;
+}
+
+.mascot-avatar-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #1E293B, #0F172A);
+    border: 2px solid var(--accent-orange);
+    border-radius: 999px;
+    padding: 5px 14px 5px 6px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    transition: transform 0.2s ease;
+}
+
+.mascot-avatar-trigger:hover {
+    transform: scale(1.04);
+}
+
+/* ================= PHÒNG MENTOR AI 2D (FULLSCREEN STUDIO) ================= */
+@keyframes studioFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+.studio-character-float {
+    animation: studioFloat 3.2s ease-in-out infinite;
+}
+
+.studio-mode-btn {
+    background: #0F172A;
+    border: 1px solid var(--border-subtle);
+    transition: all 0.2s ease;
+}
+
+.studio-mode-btn:hover {
+    background: #162238;
+    border-color: var(--accent-orange);
+    transform: translateX(4px);
+}
+
+.studio-mode-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.studio-msg-row {
+    display: flex;
+}
+
+.studio-msg-row.user {
+    justify-content: flex-end;
+}
+
+.studio-msg-row.assistant {
+    justify-content: flex-start;
+}
+
+.studio-msg-bubble {
+    max-width: 85%;
+    padding: 1rem 1.2rem;
+    border-radius: 14px;
+    font-size: 16px;
+    line-height: 1.65;
+}
+
+.studio-msg-bubble.assistant {
+    background: #0F172A;
+    border: 1px solid rgba(249, 115, 22, 0.35);
+    color: #F8FAFC;
+}
+
+.studio-msg-bubble.user {
+    background: rgba(56, 189, 248, 0.14);
+    border: 1px solid rgba(56, 189, 248, 0.38);
+    color: #F8FAFC;
+}

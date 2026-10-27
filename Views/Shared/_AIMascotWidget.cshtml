@@ -1,0 +1,100 @@
+@{
+    var subLessonCode = ViewData["CurrentSubLessonCode"]?.ToString() ?? "1.1";
+    var subLessonTitle = ViewData["CurrentSubLessonTitle"]?.ToString() ?? "Bài học C# .NET 10";
+}
+
+<!-- TRỢ LÝ ẢO 2D VIỆTBOT (Góc phải màn hình) -->
+<div id="globalAiMascotDock"
+     class="ai-mascot-floating-dock mascot-mood-explaining"
+     data-lesson-code="@subLessonCode"
+     data-lesson-title="@subLessonTitle">
+
+    <!-- Bóng thoại tương tác -->
+    <div id="mascotSpeechBubble" class="mascot-speech-bubble">
+        <div class="d-flex align-items-center justify-content-between mb-2 pb-1 border-bottom border-secondary border-opacity-25">
+            <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold text-warning" style="font-size: 0.85rem;">
+                    <i class="bi bi-stars me-1"></i>ViệtBot 2D - Trợ giảng C#
+                </span>
+            </div>
+            <div class="d-flex align-items-center gap-1">
+                <a asp-controller="AIStudio" asp-action="Index" class="btn btn-sm py-0 px-2 text-info" title="Mở Phòng Mentor AI 2D" style="font-size: 0.75rem;">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                </a>
+                <button type="button" class="btn btn-sm py-0 px-1 text-secondary" onclick="window.HoangVietMascot.toggleBubble(false)" title="Thu gọn bóng thoại">
+                    <i class="bi bi-dash-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Nội dung trả lời của Trợ lý 2D -->
+        <div id="mascotBubbleText" class="mb-2" style="font-size: 0.88rem; color: #F1F5F9; line-height: 1.6; max-height: 220px; overflow-y: auto;">
+            Chào <strong>Hoàng Việt</strong>! Bạn đang học <strong>Bài @subLessonCode</strong>. Hãy chọn 1 trong 3 gợi ý nhanh dưới đây hoặc đặt câu hỏi nhé!
+        </div>
+
+        <!-- 3 Nút câu hỏi gợi ý nhanh theo ngữ cảnh bài học -->
+        <div class="d-flex flex-column gap-1 mb-2">
+            <button type="button" class="btn btn-sm text-start py-1 px-2 rounded-2 mascot-quick-btn"
+                    onclick="window.HoangVietMascot.askPreset('Giải thích bài học này bằng ví dụ đời thường')">
+                <i class="bi bi-lightbulb-fill text-warning me-1"></i>1. Giải thích bài học này bằng ví dụ đời thường
+            </button>
+            <button type="button" class="btn btn-sm text-start py-1 px-2 rounded-2 mascot-quick-btn"
+                    onclick="window.HoangVietMascot.askPreset('Đoạn code ở Bước này chạy như thế nào?')">
+                <i class="bi bi-code-slash text-info me-1"></i>2. Đoạn code ở Bước này chạy như thế nào?
+            </button>
+            <button type="button" class="btn btn-sm text-start py-1 px-2 rounded-2 mascot-quick-btn"
+                    onclick="window.HoangVietMascot.askPreset('Khi đi phỏng vấn người ta hay hỏi gì ở phần này?')">
+                <i class="bi bi-briefcase-fill text-success me-1"></i>3. Khi đi phỏng vấn người ta hay hỏi gì ở phần này?
+            </button>
+        </div>
+
+        <!-- Ô nhập câu hỏi cho ViệtBot -->
+        <form onsubmit="window.HoangVietMascot.askQuickQuestion(event)" class="d-flex gap-1 mt-1">
+            <input type="text" id="mascotQuickInput" class="form-control form-control-sm bg-dark text-light border-secondary border-opacity-50"
+                   placeholder="Nhập câu hỏi cho ViệtBot..." style="font-size: 0.8rem; border-radius: 8px;" />
+            <button type="submit" class="btn btn-sm px-2" style="background: #F97316; color: #fff; border-radius: 8px;">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- Nút nhân vật 2D SVG -->
+    <div class="mascot-avatar-trigger" onclick="window.HoangVietMascot.toggleBubble()" title="Click để bật/tắt trợ lý AI 2D">
+        <div class="position-relative" style="width: 54px; height: 54px;">
+            <svg viewBox="0 0 120 120" width="54" height="54" class="mascot-svg-character">
+                <defs>
+                    <linearGradient id="visorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#0F172A" />
+                        <stop offset="100%" stop-color="#1E293B" />
+                    </linearGradient>
+                    <linearGradient id="suitGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#F97316" />
+                        <stop offset="100%" stop-color="#EA580C" />
+                    </linearGradient>
+                </defs>
+                <circle cx="60" cy="62" r="52" fill="rgba(15,23,42,0.9)" stroke="#F97316" stroke-width="3" class="mascot-aura" />
+                <line x1="60" y1="8" x2="60" y2="22" stroke="#94A3B8" stroke-width="4" stroke-linecap="round" />
+                <circle cx="60" cy="8" r="6" fill="#10B981" class="mascot-antenna-glow" />
+                <rect x="24" y="22" width="72" height="58" rx="26" fill="#F8FAFC" stroke="#334155" stroke-width="3" />
+                <rect x="16" y="38" width="10" height="26" rx="5" fill="url(#suitGrad)" />
+                <rect x="94" y="38" width="10" height="26" rx="5" fill="url(#suitGrad)" />
+                <rect x="32" y="32" width="56" height="38" rx="16" fill="url(#visorGrad)" stroke="#38BDF8" stroke-width="2" />
+                <g class="mascot-eye" id="mascotEyesGroup">
+                    <circle cx="47" cy="48" r="5.5" fill="#10B981" />
+                    <circle cx="73" cy="48" r="5.5" fill="#10B981" />
+                    <circle cx="49" cy="46" r="2" fill="#FFFFFF" />
+                    <circle cx="75" cy="46" r="2" fill="#FFFFFF" />
+                </g>
+                <path id="mascotMouthPath" d="M 50 59 Q 60 66 70 59" stroke="#F97316" stroke-width="3" fill="none" stroke-linecap="round" />
+                <path d="M 35 80 L 85 80 L 92 106 L 28 106 Z" fill="url(#suitGrad)" />
+                <text x="60" y="99" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-weight="800" font-size="13">C#10</text>
+            </svg>
+        </div>
+        <div class="d-none d-sm-block text-start pe-1">
+            <div class="fw-bold text-white" style="font-size: 0.85rem; line-height: 1.2;">ViệtBot 2D</div>
+            <div class="text-success" style="font-size: 0.72rem; font-family: var(--font-mono);">
+                <span class="spinner-grow spinner-grow-sm me-1" style="width: 7px; height: 7px;"></span>Trợ giảng C#
+            </div>
+        </div>
+    </div>
+</div>
