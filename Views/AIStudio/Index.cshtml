@@ -1,188 +1,263 @@
 @model HoangViet.Models.AIStudioViewModel
 @{
-    ViewData["Title"] = "🤖 Phòng Mentor AI 2D - ViệtBot Trợ Giảng C#";
+    ViewData["Title"] = "🤖 Phòng Mentor AI 3D - Bục Giảng Hologram Trung Tâm";
 }
 
-<div class="container-fluid py-4 px-3 px-lg-4" style="max-width: 1480px;">
-    <div class="row g-4 align-items-stretch" style="min-height: calc(100vh - 125px);">
+<!-- KHÔNG GIAN RIÊNG: PHÒNG MENTOR AI 3D (CENTRAL HOLOGRAM PODIUM & ORBITING HUD PANELS) -->
+<div class="ai-studio-3d-universe">
+    <!-- Lưới không gian Sci-Fi & Ánh sáng vũ trụ nền -->
+    <div class="ai-studio-starfield"></div>
+    <div class="ai-studio-floor-grid"></div>
 
-        <!-- ================= CỘT TRÁI (35%): SÂN KHẤU HOLOGRAM 3D-READY & 3 CHẾ ĐỘ CHỌN NHANH ================= -->
-        <div class="col-lg-4 d-flex flex-column">
-            <div class="cp-section-card h-100 d-flex flex-column justify-content-between mb-0">
+    <!-- Thanh trạng thái HUD phía trên phòng Studio -->
+    <div class="ai-studio-top-bar container-fluid px-3 px-lg-5 pt-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div class="d-flex align-items-center gap-3">
+                <a asp-controller="Home" asp-action="Index" asp-route-track="INTERN_TRACK" class="btn btn-sm ai-hud-back-btn">
+                    <i class="bi bi-arrow-left me-1"></i>Quay lại Bài học
+                </a>
                 <div>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="badge rounded-pill px-3 py-2 hv-track-pill-intern fw-bold">
-                            <i class="bi bi-stars me-1"></i>VIỆTBOT HOLO-STUDIO
-                        </span>
-                        <span id="studioMoodBadge" class="badge bg-success bg-opacity-25 text-success px-3 py-2">
-                            <span class="spinner-grow spinner-grow-sm me-1" style="width: 7px; height: 7px;"></span>Sẵn sàng hỗ trợ
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="ai-hud-System-tag font-mono">HOLO-STAGE // 3D-READY PODIUM</span>
+                        <span id="studioMoodBadge" class="badge rounded-pill ai-hud-status-badge">
+                            <span class="spinner-grow spinner-grow-sm me-1" style="width: 7px; height: 7px;"></span>Sẵn sàng tương tác
                         </span>
                     </div>
-
-                    <!-- Sân khấu Đế chiếu Hologram tách riêng khỏi Viewport nhân vật (3D-Ready Architecture) -->
-                    <div class="studio-character-stage hv-hologram-pod text-center py-4 my-2">
-                        <!--
-                            [3D-READY VIEWPORT]:
-                            Khi nâng cấp lên Three.js / WebGL 3D Model, chỉ cần mount <canvas> vào #mascotRenderViewport
-                            và đổi data-render-mode="3d-webgl". Phần đế & hào quang .hv-hologram-pod bên ngoài giữ nguyên.
-                        -->
-                        <div id="mascotRenderViewport"
-                             class="hv-mascot-viewport hv-mascot-viewport-studio studio-character-float"
-                             data-render-mode="2d-svg">
-                            <svg viewBox="0 0 180 180" width="165" height="165" id="studioMascotSvg">
-                                <defs>
-                                    <linearGradient id="studioVisor" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#050811" />
-                                        <stop offset="100%" stop-color="#1E293B" />
-                                    </linearGradient>
-                                    <linearGradient id="studioSuit" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#00F0FF" />
-                                        <stop offset="100%" stop-color="#3B82F6" />
-                                    </linearGradient>
-                                </defs>
-                                <!-- Vòng hào quang chuyển động -->
-                                <circle cx="90" cy="92" r="78" fill="rgba(6,9,19,0.85)" stroke="#00F0FF" stroke-width="3.5" stroke-dasharray="10 6" />
-                                <!-- Ăng-ten phát sáng -->
-                                <line x1="90" y1="12" x2="90" y2="34" stroke="#94A3B8" stroke-width="5" stroke-linecap="round" />
-                                <circle cx="90" cy="12" r="9" fill="#10B981" id="studioAntennaLight" />
-                                <!-- Mũ bảo hiểm 2D -->
-                                <rect x="36" y="34" width="108" height="86" rx="38" fill="#F8FAFC" stroke="#38BDF8" stroke-width="4" />
-                                <!-- Tai nghe 2 bên -->
-                                <rect x="22" y="58" width="16" height="38" rx="8" fill="url(#studioSuit)" />
-                                <rect x="142" y="58" width="16" height="38" rx="8" fill="url(#studioSuit)" />
-                                <!-- Màn hình gương mặt kỹ thuật số -->
-                                <rect x="48" y="48" width="84" height="58" rx="24" fill="url(#studioVisor)" stroke="#00F0FF" stroke-width="3" />
-                                <!-- Đôi mắt biểu cảm -->
-                                <g id="studioMascotEyes">
-                                    <circle cx="70" cy="72" r="8.5" fill="#00F0FF" />
-                                    <circle cx="110" cy="72" r="8.5" fill="#00F0FF" />
-                                    <circle cx="73" cy="69" r="3" fill="#FFFFFF" />
-                                    <circle cx="113" cy="69" r="3" fill="#FFFFFF" />
-                                </g>
-                                <!-- Miệng biểu cảm -->
-                                <path id="studioMascotMouth" d="M 74 90 Q 90 101 106 90" stroke="#10B981" stroke-width="4.5" fill="none" stroke-linecap="round" />
-                                <!-- Thân áo C# 10 -->
-                                <path d="M 52 120 L 128 120 L 140 160 L 40 160 Z" fill="url(#studioSuit)" />
-                                <text x="90" y="147" text-anchor="middle" fill="#050811" font-family="JetBrains Mono, monospace" font-weight="800" font-size="18">C# .NET 10</text>
-                            </svg>
-                        </div>
-
-                        <h2 class="h5 fw-bold text-white mt-2 mb-1">ViệtBot 2D - Trợ giảng C#</h2>
-                        <p id="studioExpressionText" class="small text-secondary mb-0 px-3">
-                            Đồng hành cùng Hoàng Việt đọc hiểu kiến trúc dự án, luyện phỏng vấn Intern và rà soát lỗi code C#.
-                        </p>
-                    </div>
-
-                    <!-- 3 Chế độ chọn nhanh -->
-                    <div class="mt-3">
-                        <div class="small fw-bold text-uppercase text-info mb-2 font-mono">
-                            <i class="bi bi-lightning-charge-fill me-1"></i>3 Chế độ huấn luyện nhanh
-                        </div>
-                        <div class="d-grid gap-2">
-                            <button type="button" class="btn text-start p-3 rounded-3 studio-mode-btn"
-                                    onclick="window.HoangVietStudio.triggerMode('Phỏng vấn thử C# Intern', 'interview')">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="studio-mode-icon bg-warning bg-opacity-25 text-warning">
-                                        <i class="bi bi-person-workspace fs-5"></i>
-                                    </div>
-                                    <div>
-                                        <div class="fw-bold text-white">Phỏng vấn thử C# Intern</div>
-                                        <div class="small text-secondary">Đặt câu hỏi thực chiến OOP, LINQ, EF Core, DI & gợi ý trả lời</div>
-                                    </div>
-                                </div>
-                            </button>
-
-                            <button type="button" class="btn text-start p-3 rounded-3 studio-mode-btn"
-                                    onclick="window.HoangVietStudio.triggerMode('Giải thích luồng bài tập lớn MVC', 'happy')">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="studio-mode-icon bg-info bg-opacity-25 text-info">
-                                        <i class="bi bi-diagram-3-fill fs-5"></i>
-                                    </div>
-                                    <div>
-                                        <div class="fw-bold text-white">Giải thích luồng bài tập lớn MVC</div>
-                                        <div class="small text-secondary">Bóc tách đường đi từ Request ➔ Controller ➔ Service ➔ SQL</div>
-                                    </div>
-                                </div>
-                            </button>
-
-                            <button type="button" class="btn text-start p-3 rounded-3 studio-mode-btn"
-                                    onclick="window.HoangVietStudio.triggerMode('Review & Tìm lỗi đoạn code', 'thinking')">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="studio-mode-icon bg-success bg-opacity-25 text-success">
-                                        <i class="bi bi-bug-fill fs-5"></i>
-                                    </div>
-                                    <div>
-                                        <div class="fw-bold text-white">Review & Tìm lỗi đoạn code</div>
-                                        <div class="small text-secondary">Phát hiện lỗi Null, N+1 Query, thiếu async/await & tối ưu Clean Code</div>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-3 pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                    <a asp-controller="Home" asp-action="Index" asp-route-track="INTERN_TRACK" class="btn btn-sm btn-hv-outline w-100">
-                        <i class="bi bi-arrow-left me-1"></i>Quay lại Bài học đang mở
-                    </a>
+                    <h1 class="h5 fw-bold text-white mb-0 mt-1">Phòng Mentor AI 3D — Trung Tâm Huấn Luyện Kỹ Sư C# .NET 10</h1>
                 </div>
             </div>
-        </div>
 
-        <!-- ================= CỘT PHẢI (65%): KHUNG TRÒ CHUYỆN TOÀN MÀN HÌNH RỘNG RÃI ================= -->
-        <div class="col-lg-8 d-flex flex-column">
-            <div class="cp-section-card h-100 d-flex flex-column justify-content-between mb-0">
-                <!-- Header khung trò chuyện -->
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 border-bottom border-secondary border-opacity-25">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="fs-4">🤖</span>
-                        <div>
-                            <h1 class="h5 fw-bold text-white mb-0">Phòng Mentor AI 2D — Không Gian Trao Đổi Chuyên Sâu</h1>
-                            <div class="small text-secondary">Hỏi đáp trực tiếp về C#, OOP, SQL Server, EF Core, Web API & kinh nghiệm đi thực tập</div>
+            <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-sm ai-hud-action-btn" onclick="window.HoangVietStudio.openChatDrawer(true)">
+                    <i class="bi bi-chat-dots-fill me-1"></i>Mở Khung Hội Thoại
+                </button>
+                <button type="button" class="btn btn-sm ai-hud-action-btn" onclick="window.HoangVietStudio.clearHistory()">
+                    <i class="bi bi-arrow-repeat me-1"></i>Làm mới phiên
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SÂN KHẤU TRUNG TÂM: BỤC GIẢNG HOLOGRAM & 4 BẢNG ĐIỀU KHIỂN BAY XUNG QUANH ================= -->
+    <div class="ai-studio-arena container-fluid px-3 px-lg-5">
+        <div class="ai-orbit-layout">
+
+            <!-- CỘT BẢNG BAY BÊN TRÁI (BẢNG 1 & BẢNG 2) -->
+            <div class="ai-orbit-column ai-orbit-left">
+                <!-- Bảng 1: Phỏng vấn thử C# .NET Intern -->
+                <button type="button"
+                        class="ai-orbit-hud-card orbit-card-1 text-start"
+                        data-orbit-mode="interview"
+                        onclick="window.HoangVietStudio.triggerMode('interview')">
+                    <div class="ai-orbit-card-glow"></div>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="ai-orbit-node-tag font-mono">HUD PANEL 01 // INTERVIEW</span>
+                        <span class="ai-orbit-icon-wrap icon-amber">🎯</span>
+                    </div>
+                    <h2 class="ai-orbit-title">Phỏng vấn thử C# .NET Intern</h2>
+                    <p class="ai-orbit-desc mb-2">
+                        Đóng vai Senior Tech Lead đặt câu hỏi thực chiến về OOP, LINQ, EF Core, Dependency Injection & gợi ý trả lời ăn điểm.
+                    </p>
+                    <div class="ai-orbit-cta font-mono">
+                        <span>Kích hoạt mô phỏng</span> <i class="bi bi-arrow-up-right-circle-fill ms-1"></i>
+                    </div>
+                </button>
+
+                <!-- Bảng 2: Giải thích Luồng Kiến trúc MVC / API -->
+                <button type="button"
+                        class="ai-orbit-hud-card orbit-card-2 text-start"
+                        data-orbit-mode="architecture"
+                        onclick="window.HoangVietStudio.triggerMode('architecture')">
+                    <div class="ai-orbit-card-glow"></div>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="ai-orbit-node-tag font-mono">HUD PANEL 02 // ARCHITECTURE</span>
+                        <span class="ai-orbit-icon-wrap icon-cyan">⚡</span>
+                    </div>
+                    <h2 class="ai-orbit-title">Giải thích Luồng Kiến trúc MVC / API</h2>
+                    <p class="ai-orbit-desc mb-2">
+                        Bóc tách đường đi của Request ➔ Controller ➔ Service ➔ Repository ➔ SQL Server và cách đặt Breakpoint đọc project.
+                    </p>
+                    <div class="ai-orbit-cta font-mono">
+                        <span>Phân tích kiến trúc</span> <i class="bi bi-arrow-up-right-circle-fill ms-1"></i>
+                    </div>
+                </button>
+            </div>
+
+            <!-- ================= BỤC GIẢNG HOLOGRAM TRUNG TÂM (CENTRAL HOLOGRAM PODIUM - 3D-READY) ================= -->
+            <div class="ai-central-podium-zone">
+                <div class="ai-hologram-chamber">
+                    <!-- Các vòng năng lượng xoay quanh nhân vật -->
+                    <div class="ai-holo-ring ring-outer"></div>
+                    <div class="ai-holo-ring ring-middle"></div>
+                    <div class="ai-holo-beam"></div>
+
+                    <!-- KHUNG VIEWPORT ĐỘC LẬP CHUẨN 3D-READY (Sẵn sàng thay <svg> bằng <canvas> Three.js) -->
+                    <div id="mascotRenderViewport"
+                         class="hv-mascot-viewport studio-character-float"
+                         data-render-mode="2d-svg">
+                        <svg viewBox="0 0 180 180" width="210" height="210" id="studioMascotSvg">
+                            <defs>
+                                <linearGradient id="studioVisor" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#050811" />
+                                    <stop offset="100%" stop-color="#1E293B" />
+                                </linearGradient>
+                                <linearGradient id="studioSuit" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#00F0FF" />
+                                    <stop offset="100%" stop-color="#3B82F6" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Vòng hào quang nhân vật -->
+                            <circle cx="90" cy="92" r="78" fill="rgba(6,9,19,0.75)" stroke="#00F0FF" stroke-width="3" stroke-dasharray="10 6" />
+                            <!-- Ăng-ten phát sáng -->
+                            <line x1="90" y1="12" x2="90" y2="34" stroke="#94A3B8" stroke-width="5" stroke-linecap="round" />
+                            <circle cx="90" cy="12" r="9" fill="#10B981" id="studioAntennaLight" />
+                            <!-- Mũ bảo hiểm công nghệ -->
+                            <rect x="36" y="34" width="108" height="86" rx="38" fill="#F8FAFC" stroke="#38BDF8" stroke-width="4" />
+                            <!-- Tai nghe 2 bên -->
+                            <rect x="22" y="58" width="16" height="38" rx="8" fill="url(#studioSuit)" />
+                            <rect x="142" y="58" width="16" height="38" rx="8" fill="url(#studioSuit)" />
+                            <!-- Màn hình gương mặt kỹ thuật số -->
+                            <rect x="48" y="48" width="84" height="58" rx="24" fill="url(#studioVisor)" stroke="#00F0FF" stroke-width="3" />
+                            <!-- Đôi mắt biểu cảm -->
+                            <g id="studioMascotEyes">
+                                <circle cx="70" cy="72" r="8.5" fill="#00F0FF" />
+                                <circle cx="110" cy="72" r="8.5" fill="#00F0FF" />
+                                <circle cx="73" cy="69" r="3" fill="#FFFFFF" />
+                                <circle cx="113" cy="69" r="3" fill="#FFFFFF" />
+                            </g>
+                            <!-- Miệng biểu cảm -->
+                            <path id="studioMascotMouth" d="M 74 90 Q 90 101 106 90" stroke="#10B981" stroke-width="4.5" fill="none" stroke-linecap="round" />
+                            <!-- Thân áo C# 10 -->
+                            <path d="M 52 120 L 128 120 L 140 160 L 40 160 Z" fill="url(#studioSuit)" />
+                            <text x="90" y="147" text-anchor="middle" fill="#050811" font-family="JetBrains Mono, monospace" font-weight="800" font-size="18">C# .NET 10</text>
+                        </svg>
+                    </div>
+
+                    <!-- Đế chiếu Hologram tròn phát sáng dưới chân nhân vật -->
+                    <div class="ai-podium-pedestal">
+                        <div class="ai-podium-disc disc-top"></div>
+                        <div class="ai-podium-disc disc-middle"></div>
+                        <div class="ai-podium-disc disc-base"></div>
+                    </div>
+                </div>
+
+                <!-- Thông tin biểu cảm của Mentor ngay dưới bục giảng -->
+                <div class="ai-podium-caption text-center mt-2">
+                    <div class="ai-mentor-name">VIỆTBOT AI MENTOR</div>
+                    <p id="studioExpressionText" class="ai-mentor-status mb-0">
+                        Hãy chọn một Bảng điều khiển bay xung quanh để bắt đầu phiên huấn luyện hoặc hỏi đáp trực tiếp!
+                    </p>
+                </div>
+            </div>
+
+            <!-- CỘT BẢNG BAY BÊN PHẢI (BẢNG 3 & BẢNG 4) -->
+            <div class="ai-orbit-column ai-orbit-right">
+                <!-- Bảng 3: Review & Tìm lỗi Code C# -->
+                <button type="button"
+                        class="ai-orbit-hud-card orbit-card-3 text-start"
+                        data-orbit-mode="codereview"
+                        onclick="window.HoangVietStudio.triggerMode('codereview')">
+                    <div class="ai-orbit-card-glow"></div>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="ai-orbit-node-tag font-mono">HUD PANEL 03 // CODE REVIEW</span>
+                        <span class="ai-orbit-icon-wrap icon-emerald">🔍</span>
+                    </div>
+                    <h2 class="ai-orbit-title">Review & Tìm lỗi Code C#</h2>
+                    <p class="ai-orbit-desc mb-2">
+                        Rà soát lỗi NullReferenceException, N+1 Query trong EF Core, thiếu async/await và tối ưu theo chuẩn Clean Code.
+                    </p>
+                    <div class="ai-orbit-cta font-mono">
+                        <span>Mở trình rà soát lỗi</span> <i class="bi bi-arrow-up-right-circle-fill ms-1"></i>
+                    </div>
+                </button>
+
+                <!-- Bảng 4: Hỏi đáp tự do cùng Mentor -->
+                <button type="button"
+                        class="ai-orbit-hud-card orbit-card-4 text-start"
+                        data-orbit-mode="freechat"
+                        onclick="window.HoangVietStudio.triggerMode('freechat')">
+                    <div class="ai-orbit-card-glow"></div>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="ai-orbit-node-tag font-mono">HUD PANEL 04 // OPEN CONSOLE</span>
+                        <span class="ai-orbit-icon-wrap icon-purple">💬</span>
+                    </div>
+                    <h2 class="ai-orbit-title">Hỏi đáp tự do cùng Mentor</h2>
+                    <p class="ai-orbit-desc mb-2">
+                        Mở bảng điều khiển hội thoại trực tiếp để đặt bất kỳ câu hỏi nào về C#, SQL Server, Web API hoặc dán code cần giải thích.
+                    </p>
+                    <div class="ai-orbit-cta font-mono">
+                        <span>Mở khung trò chuyện</span> <i class="bi bi-arrow-up-right-circle-fill ms-1"></i>
+                    </div>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= KHUNG HỘI THOẠI TRƯỢT LÊN KHI CHỌN BẢNG ĐIỀU KHIỂN (SLIDE-UP HOLO CONSOLE) ================= -->
+    <div id="studioChatDrawer" class="ai-studio-chat-drawer">
+        <div class="ai-chat-drawer-inner container">
+            <!-- Header khung hội thoại -->
+            <div class="ai-chat-drawer-header">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="fs-5">🤖</span>
+                    <div>
+                        <div class="fw-bold text-white" id="studioActiveModeTitle">Kênh Hội Thoại Chuyên Sâu — ViệtBot Mentor</div>
+                        <div class="small text-info font-mono" style="font-size: 0.74rem;">
+                            Bấm vào các Bảng điều khiển phía trên để đổi chuyên đề hoặc nhập câu hỏi trực tiếp bên dưới
                         </div>
                     </div>
-                    <button type="button" class="btn btn-sm btn-hv-outline" onclick="window.HoangVietStudio.clearHistory()">
-                        <i class="bi bi-trash3 me-1"></i>Làm mới cuộc trò chuyện
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn btn-sm ai-hud-action-btn" onclick="window.HoangVietStudio.clearHistory()">
+                        <i class="bi bi-trash3 me-1"></i>Xóa lịch sử
+                    </button>
+                    <button type="button" class="btn btn-sm ai-hud-action-btn" onclick="window.HoangVietStudio.openChatDrawer(false)" title="Thu gọn khung chat để quan sát toàn cảnh Bục giảng 3D">
+                        <i class="bi bi-chevron-down me-1"></i>Thu gọn
                     </button>
                 </div>
+            </div>
 
-                <!-- Danh sách tin nhắn hội thoại -->
-                <div id="studioChatMessages" class="flex-grow-1 py-3 px-2 my-2 overflow-auto" style="max-height: 62vh; min-height: 380px;">
-                    <div class="studio-msg-row assistant mb-3">
-                        <div class="studio-msg-bubble assistant">
-                            <div class="fw-bold text-info small mb-1">
-                                <i class="bi bi-robot me-1"></i>ViệtBot 2D - Trợ giảng C#
-                            </div>
-                            <div>
-                                Chào <strong>Hoàng Việt</strong>! Chào mừng bạn đến với <strong>Phòng Mentor AI 2D</strong>.<br />
-                                Bạn có thể bấm vào <strong>1 trong 3 chế độ bên cột trái</strong> (<em>Phỏng vấn thử C# Intern</em>, <em>Giải thích luồng bài tập lớn MVC</em>, <em>Review & Tìm lỗi đoạn code</em>) hoặc nhập trực tiếp câu hỏi / đoạn code C# xuống bên dưới để mình phân tích chi tiết nhé!
-                            </div>
+            <!-- Danh sách tin nhắn hội thoại (Giữ nguyên ID #studioChatMessages) -->
+            <div id="studioChatMessages" class="ai-chat-messages-box">
+                <div class="studio-msg-row assistant mb-3">
+                    <div class="studio-msg-bubble assistant">
+                        <div class="fw-bold text-info small mb-1">
+                            <i class="bi bi-robot me-1"></i>ViệtBot - Trợ giảng C# .NET 10
+                        </div>
+                        <div>
+                            Chào <strong>Hoàng Việt</strong>! Chào mừng bạn đến với <strong>Không gian Mentor AI 3D</strong>.<br />
+                            Hãy click vào <strong>1 trong 4 Bảng điều khiển bay xung quanh bục giảng</strong> (<em>🎯 Phỏng vấn thử</em>, <em>⚡ Kiến trúc MVC/API</em>, <em>🔍 Review Code</em>, <em>💬 Hỏi đáp tự do</em>) hoặc nhập câu hỏi bên dưới nhé!
                         </div>
                     </div>
                 </div>
-
-                <!-- Khung nhập câu hỏi toàn màn hình -->
-                <form onsubmit="window.HoangVietStudio.sendMessage(event)" class="pt-3 border-top border-secondary border-opacity-25">
-                    <div class="input-group">
-                        <input type="text"
-                               id="studioChatInput"
-                               class="form-control bg-dark text-light border-info border-opacity-50 py-2 px-3"
-                               placeholder="Nhập câu hỏi cho ChatBot..."
-                               style="font-size: 16px; border-radius: 10px 0 0 10px;" />
-                        <button type="submit" id="studioSendBtn" class="btn btn-hv-orange px-4 fw-bold" style="border-radius: 0 10px 10px 0;">
-                            <i class="bi bi-send-fill me-1"></i>Gửi câu hỏi
-                        </button>
-                    </div>
-                </form>
             </div>
-        </div>
 
+            <!-- Khung nhập câu hỏi (Giữ nguyên ID #studioChatInput & #studioSendBtn) -->
+            <form onsubmit="window.HoangVietStudio.sendMessage(event)" class="ai-chat-input-bar">
+                <div class="input-group">
+                    <input type="text"
+                           id="studioChatInput"
+                           class="form-control ai-chat-input"
+                           placeholder="Nhập câu hỏi hoặc dán đoạn code C# cần Mentor phân tích..." />
+                    <button type="submit" id="studioSendBtn" class="btn ai-chat-send-btn px-4 fw-bold">
+                        <i class="bi bi-send-fill me-1"></i>Gửi câu hỏi
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
         window.HoangVietStudio = {
+            openChatDrawer: function (open) {
+                const drawer = document.getElementById('studioChatDrawer');
+                if (!drawer) return;
+                drawer.classList.toggle('drawer-open', !!open);
+            },
+
             setMood: function (mood) {
                 const viewport = document.getElementById('mascotRenderViewport');
                 if (viewport) {
@@ -200,21 +275,21 @@
 
                 if (mood === 'interview') {
                     if (badge) {
-                        badge.className = 'badge bg-warning text-dark px-3 py-2 fw-bold';
+                        badge.className = 'badge rounded-pill bg-warning text-dark px-3 py-1 fw-bold';
                         badge.innerHTML = '<i class="bi bi-mic-fill me-1"></i>Chế độ Phỏng vấn Intern';
                     }
                     if (expText) expText.textContent = 'Đang đóng vai Senior .NET Tech Lead phỏng vấn thực tập sinh Hoàng Việt.';
                     if (mouth) mouth.setAttribute('d', 'M 74 92 Q 90 98 106 92');
                 } else if (mood === 'thinking') {
                     if (badge) {
-                        badge.className = 'badge bg-info text-dark px-3 py-2 fw-bold';
+                        badge.className = 'badge rounded-pill bg-info text-dark px-3 py-1 fw-bold';
                         badge.innerHTML = '<i class="bi bi-search me-1"></i>Đang rà soát & phân tích Code';
                     }
                     if (expText) expText.textContent = 'Đang soi từng mắt xích C# để tìm lỗi Null, hiệu năng LINQ và kiến trúc.';
                     if (mouth) mouth.setAttribute('d', 'M 76 93 L 104 93');
                 } else {
                     if (badge) {
-                        badge.className = 'badge bg-success bg-opacity-25 text-success px-3 py-2';
+                        badge.className = 'badge rounded-pill ai-hud-status-badge';
                         badge.innerHTML = '<span class="spinner-grow spinner-grow-sm me-1" style="width: 7px; height: 7px;"></span>Đang giảng giải luồng C#';
                     }
                     if (expText) expText.textContent = 'Đồng hành cùng Hoàng Việt đọc hiểu kiến trúc dự án, luyện phỏng vấn Intern và rà soát lỗi code C#.';
@@ -222,10 +297,42 @@
                 }
             },
 
-            triggerMode: function (modePrompt, mood) {
-                this.setMood(mood);
-                this.appendMessage('user', modePrompt);
-                this.fetchReply(modePrompt);
+            triggerMode: function (modeKeyOrPrompt, optionalMood) {
+                // Highlight bảng điều khiển đang chọn
+                const allCards = document.querySelectorAll('.ai-orbit-hud-card');
+                allCards.forEach(c => {
+                    c.classList.toggle('active', c.getAttribute('data-orbit-mode') === modeKeyOrPrompt);
+                });
+
+                const modeTitleEl = document.getElementById('studioActiveModeTitle');
+                let promptToSend = modeKeyOrPrompt;
+                let targetMood = optionalMood || 'happy';
+
+                if (modeKeyOrPrompt === 'interview') {
+                    promptToSend = 'Phỏng vấn thử C# Intern';
+                    targetMood = 'interview';
+                    if (modeTitleEl) modeTitleEl.textContent = '🎯 Chế độ 1: Phỏng vấn thử C# .NET Intern';
+                } else if (modeKeyOrPrompt === 'architecture') {
+                    promptToSend = 'Giải thích luồng bài tập lớn MVC';
+                    targetMood = 'happy';
+                    if (modeTitleEl) modeTitleEl.textContent = '⚡ Chế độ 2: Giải thích Luồng Kiến trúc MVC / API';
+                } else if (modeKeyOrPrompt === 'codereview') {
+                    promptToSend = 'Review & Tìm lỗi đoạn code';
+                    targetMood = 'thinking';
+                    if (modeTitleEl) modeTitleEl.textContent = '🔍 Chế độ 3: Review & Tìm lỗi Code C#';
+                } else if (modeKeyOrPrompt === 'freechat') {
+                    this.setMood('happy');
+                    if (modeTitleEl) modeTitleEl.textContent = '💬 Chế độ 4: Hỏi đáp tự do cùng Mentor';
+                    this.openChatDrawer(true);
+                    const input = document.getElementById('studioChatInput');
+                    if (input) setTimeout(() => input.focus(), 180);
+                    return;
+                }
+
+                this.setMood(targetMood);
+                this.openChatDrawer(true);
+                this.appendMessage('user', promptToSend);
+                this.fetchReply(promptToSend);
             },
 
             sendMessage: function (e) {
@@ -234,6 +341,7 @@
                 if (!input || !input.value.trim()) return;
                 const text = input.value.trim();
                 input.value = '';
+                this.openChatDrawer(true);
                 this.appendMessage('user', text);
                 this.fetchReply(text);
             },
@@ -254,7 +362,7 @@
                 } else {
                     row.innerHTML = `
                         <div class="studio-msg-bubble assistant">
-                            <div class="fw-bold text-info small mb-1"><i class="bi bi-robot me-1"></i>ViệtBot 2D - Trợ giảng C#</div>
+                            <div class="fw-bold text-info small mb-1"><i class="bi bi-robot me-1"></i>ViệtBot - Trợ giảng C#</div>
                             <div>${htmlOrText}</div>
                         </div>`;
                 }
@@ -269,7 +377,7 @@
                     .replace(/```csharp([\s\S]*?)```/g, '<pre class="bg-black text-info p-3 rounded-3 mt-2 mb-2 font-mono border border-info border-opacity-25" style="font-size:0.88rem;"><code>$1</code></pre>')
                     .replace(/```([\s\S]*?)```/g, '<pre class="bg-black text-info p-3 rounded-3 mt-2 mb-2 font-mono border border-info border-opacity-25" style="font-size:0.88rem;"><code>$1</code></pre>')
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/`([^`]+)`/g, '<code class="hv-inline-code">$1</code>')
+                    .replace(/`([^`]+)`/g, '<code class="text-warning">$1</code>')
                     .replace(/\n/g, '<br/>');
             },
 
@@ -284,7 +392,7 @@
                         body: JSON.stringify({
                             message: question,
                             lessonCode: 'Studio',
-                            lessonTitle: 'Phòng Mentor AI 2D',
+                            lessonTitle: 'Phòng Mentor AI 3D',
                             activeStepTitle: 'Trao đổi chuyên sâu'
                         })
                     });
@@ -307,9 +415,9 @@
                     <div class="studio-msg-row assistant mb-3">
                         <div class="studio-msg-bubble assistant">
                             <div class="fw-bold text-info small mb-1">
-                                <i class="bi bi-robot me-1"></i>ViệtBot 2D - Trợ giảng C#
+                                <i class="bi bi-robot me-1"></i>ViệtBot - Trợ giảng C#
                             </div>
-                            <div>Cuộc trò chuyện đã được làm mới. Hãy chọn một chế độ bên trái hoặc nhập câu hỏi mới cho ViệtBot nhé!</div>
+                            <div>Cuộc trò chuyện đã được làm mới. Hãy click vào một Bảng điều khiển bay xung quanh nhân vật hoặc nhập câu hỏi mới nhé!</div>
                         </div>
                     </div>`;
             }

@@ -7,8 +7,8 @@
 <div class="container-fluid py-4 px-3 px-lg-5" style="max-width: 1440px;">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-            <span class="badge hv-track-pill-intern px-3 py-1 fw-bold mb-2">COMPETENCY TELEMETRY ANALYTICS</span>
-            <h1 class="h3 fw-bold text-white mb-1">Bảng Thống Kê Năng Lực & Tiến Độ Học Tập — Hoàng Việt</h1>
+            <span class="badge hv-track-pill-intern px-3 py-1 fw-bold mb-2">COMPETENCY ANALYTICS</span>
+            <h1 class="h3 fw-bold mb-1" style="color: #0F172A;">Bảng Thống Kê Năng Lực & Tiến Độ Học Tập — Hoàng Việt</h1>
             <p class="text-secondary mb-0">
                 Toàn bộ 6 nhóm kỹ năng khởi đầu ở mức <strong>0%</strong> và tăng dần theo thời gian thực khi bạn hoàn thành bài tập ở từng Bài học con.
             </p>
@@ -26,19 +26,19 @@
         </div>
     </div>
 
-    <!-- 3 Thẻ Tóm tắt Tiến độ 2 Menu (Telemetry HUD Cards) -->
+    <!-- 3 Thẻ Tóm tắt Tiến độ 2 Menu -->
     <div class="row g-3 mb-4">
         <div class="col-md-4">
             <div class="cp-section-card h-100 mb-0">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-secondary small fw-semibold font-mono">TỔNG TIẾN ĐỘ HỆ THỐNG</span>
+                    <span class="text-secondary small fw-semibold">TỔNG TIẾN ĐỘ HỆ THỐNG</span>
                     <span class="badge bg-success font-mono">@Model.OverallProgressPercent%</span>
                 </div>
-                <div class="h2 fw-bold text-white font-mono mb-2">
+                <div class="h2 fw-bold font-mono mb-2" style="color: #0F172A;">
                     @Model.CompletedLessonsCount / @Model.TotalLessonsCount <span class="fs-6 text-secondary">bài học con</span>
                 </div>
                 <div class="progress hv-progress-track-lg">
-                    <div class="progress-bar hv-progress-bar-neon" style="width: @(Model.OverallProgressPercent)%;"></div>
+                    <div class="progress-bar hv-progress-bar-primary" style="width: @(Model.OverallProgressPercent)%;"></div>
                 </div>
             </div>
         </div>
@@ -46,13 +46,13 @@
         <div class="col-md-4">
             <div class="cp-section-card h-100 mb-0">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-info small fw-semibold font-mono">MENU 1: LỘ TRÌNH ĐI THỰC TẬP (5 CHỦ ĐỀ)</span>
-                    <i class="bi bi-lightning-charge-fill text-info"></i>
+                    <span class="text-primary small fw-semibold">MENU 1: LỘ TRÌNH ĐI THỰC TẬP (5 CHỦ ĐỀ)</span>
+                    <i class="bi bi-lightning-charge-fill text-primary"></i>
                 </div>
-                <div class="h2 fw-bold text-white font-mono mb-2">
+                <div class="h2 fw-bold font-mono mb-2" style="color: #0F172A;">
                     @Model.InternTrackCompleted / @Model.InternTrackTotal <span class="fs-6 text-secondary">bài học con</span>
                 </div>
-                <a asp-controller="Home" asp-action="Index" asp-route-track="INTERN_TRACK" class="small text-info text-decoration-none fw-semibold">
+                <a asp-controller="Home" asp-action="Index" asp-route-track="INTERN_TRACK" class="small text-primary text-decoration-none fw-semibold">
                     Mở Lộ trình Thực tập <i class="bi bi-arrow-right"></i>
                 </a>
             </div>
@@ -61,13 +61,13 @@
         <div class="col-md-4">
             <div class="cp-section-card h-100 mb-0">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="small fw-semibold font-mono" style="color: #D8B4FE;">MENU 2: LỘ TRÌNH HỌC CHI TIẾT (16 CHỦ ĐỀ)</span>
-                    <i class="bi bi-journal-bookmark-fill" style="color: #D8B4FE;"></i>
+                    <span class="small fw-semibold" style="color: #7C3AED;">MENU 2: LỘ TRÌNH HỌC CHI TIẾT (16 CHỦ ĐỀ)</span>
+                    <i class="bi bi-journal-bookmark-fill" style="color: #7C3AED;"></i>
                 </div>
-                <div class="h2 fw-bold text-white font-mono mb-2">
+                <div class="h2 fw-bold font-mono mb-2" style="color: #0F172A;">
                     @Model.DetailedTrackCompleted / @Model.DetailedTrackTotal <span class="fs-6 text-secondary">bài học con</span>
                 </div>
-                <a asp-controller="Home" asp-action="Index" asp-route-track="DETAILED_TRACK" class="small text-decoration-none fw-semibold" style="color: #D8B4FE;">
+                <a asp-controller="Home" asp-action="Index" asp-route-track="DETAILED_TRACK" class="small text-decoration-none fw-semibold" style="color: #7C3AED;">
                     Mở Lộ trình Chi tiết 16 Chủ đề <i class="bi bi-arrow-right"></i>
                 </a>
             </div>
@@ -78,10 +78,10 @@
     <div class="row g-4 mb-4">
         <div class="col-lg-4">
             <div class="cp-section-card h-100 mb-0">
-                <h2 class="h6 fw-bold text-white mb-3">
-                    <i class="bi bi-diagram-3-fill text-info me-2"></i>1. Biểu đồ Mạng Nhện (Radar Chart - 6 Kỹ Năng)
+                <h2 class="h6 fw-bold mb-3" style="color: #0F172A;">
+                    <i class="bi bi-diagram-3-fill text-primary me-2"></i>1. Biểu đồ Mạng Nhện (Radar Chart - 6 Kỹ Năng)
                 </h2>
-                <div class="cp-chart-box" style="height: 310px; position: relative;">
+                <div style="height: 300px; position: relative;">
                     <canvas id="statsRadarChart"></canvas>
                 </div>
             </div>
@@ -89,10 +89,10 @@
 
         <div class="col-lg-4">
             <div class="cp-section-card h-100 mb-0">
-                <h2 class="h6 fw-bold text-white mb-3">
-                    <i class="bi bi-pie-chart-fill me-2" style="color: #D8B4FE;"></i>2. Biểu đồ Ô Tròn (Doughnut Chart - Tỷ Trọng Kỹ Năng)
+                <h2 class="h6 fw-bold mb-3" style="color: #0F172A;">
+                    <i class="bi bi-pie-chart-fill me-2" style="color: #7C3AED;"></i>2. Biểu đồ Ô Tròn (Doughnut Chart - Tỷ Trọng Kỹ Năng)
                 </h2>
-                <div class="cp-chart-box" style="height: 310px; position: relative;">
+                <div style="height: 300px; position: relative;">
                     <canvas id="statsDoughnutChart"></canvas>
                 </div>
             </div>
@@ -100,32 +100,32 @@
 
         <div class="col-lg-4">
             <div class="cp-section-card h-100 mb-0">
-                <h2 class="h6 fw-bold text-white mb-3">
+                <h2 class="h6 fw-bold mb-3" style="color: #0F172A;">
                     <i class="bi bi-graph-up-arrow text-success me-2"></i>3. Biểu đồ Đường Theo Ngày Học (Timeline Line Chart)
                 </h2>
-                <div class="cp-chart-box" style="height: 310px; position: relative;">
+                <div style="height: 300px; position: relative;">
                     <canvas id="statsTimelineChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Chi tiết từng nhóm kỹ năng (Skill Matrix Bars) -->
+    <!-- Chi tiết từng nhóm kỹ năng -->
     <div class="cp-section-card">
-        <h2 class="h5 fw-bold text-white mb-3">Chi tiết 6 nhóm năng lực C# Fullstack .NET 10</h2>
+        <h2 class="h5 fw-bold mb-3" style="color: #0F172A;">Chi tiết 6 nhóm năng lực C# Fullstack .NET 10</h2>
         <div class="row g-3">
             @foreach (var skill in Model.SkillMetrics)
             {
                 <div class="col-md-6">
                     <div class="hv-skill-matrix-card">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="fw-bold text-white">@skill.SkillName</span>
-                            <span class="font-mono fw-bold @(skill.CurrentScore > 0 ? "text-info" : "text-secondary")">
+                            <span class="fw-bold" style="color: #0F172A;">@skill.SkillName</span>
+                            <span class="font-mono fw-bold @(skill.CurrentScore > 0 ? "text-primary" : "text-secondary")">
                                 @skill.CurrentScore / @skill.MaxScore điểm (@skill.CurrentScore%)
                             </span>
                         </div>
                         <div class="progress hv-progress-track-lg">
-                            <div class="progress-bar hv-progress-bar-neon"
+                            <div class="progress-bar hv-progress-bar-primary"
                                  role="progressbar"
                                  style="width: @(skill.CurrentScore)%;">
                             </div>
@@ -145,7 +145,7 @@
             const timelineLabels = @Html.Raw(JsonSerializer.Serialize(Model.TimelinePoints.Select(t => t.DateLabel)));
             const timelineCounts = @Html.Raw(JsonSerializer.Serialize(Model.TimelinePoints.Select(t => t.CompletedLessonsCount)));
 
-            // 1. Radar Chart (Neon Cyan & Purple Spectrum)
+            // 1. Radar Chart (Modern Light Mode Palette)
             const radarCtx = document.getElementById('statsRadarChart');
             if (radarCtx && window.Chart) {
                 new Chart(radarCtx, {
@@ -155,9 +155,9 @@
                         datasets: [{
                             label: 'Điểm năng lực hiện tại (%)',
                             data: scores,
-                            backgroundColor: 'rgba(0, 240, 255, 0.18)',
-                            borderColor: '#00F0FF',
-                            pointBackgroundColor: '#A855F7',
+                            backgroundColor: 'rgba(37, 99, 235, 0.16)',
+                            borderColor: '#2563EB',
+                            pointBackgroundColor: '#059669',
                             pointBorderColor: '#FFFFFF',
                             borderWidth: 2
                         }]
@@ -169,18 +169,18 @@
                             r: {
                                 min: 0,
                                 max: 100,
-                                ticks: { stepSize: 20, color: '#94A3B8', backdropColor: 'transparent' },
-                                grid: { color: 'rgba(56, 189, 248, 0.2)' },
-                                angleLines: { color: 'rgba(56, 189, 248, 0.2)' },
-                                pointLabels: { color: '#F8FAFC', font: { size: 12, weight: '600' } }
+                                ticks: { stepSize: 20, color: '#64748B', backdropColor: 'transparent' },
+                                grid: { color: '#E2E8F0' },
+                                angleLines: { color: '#E2E8F0' },
+                                pointLabels: { color: '#334155', font: { size: 12, weight: '600' } }
                             }
                         },
-                        plugins: { legend: { labels: { color: '#E2E8F0' } } }
+                        plugins: { legend: { labels: { color: '#334155' } } }
                     }
                 });
             }
 
-            // 2. Doughnut Chart (Nếu tất cả đều 0% thì hiển thị vòng tròn chờ khởi động đẹp mắt)
+            // 2. Doughnut Chart
             const doughnutCtx = document.getElementById('statsDoughnutChart');
             if (doughnutCtx && window.Chart) {
                 const allZero = scores.every(s => s === 0);
@@ -191,9 +191,9 @@
                         datasets: [{
                             data: allZero ? [100] : scores,
                             backgroundColor: allZero
-                                ? ['rgba(56, 189, 248, 0.16)']
-                                : ['#00F0FF', '#3B82F6', '#A855F7', '#EC4899', '#10B981', '#F59E0B'],
-                            borderColor: '#060913',
+                                ? ['#E2E8F0']
+                                : ['#2563EB', '#059669', '#0284C7', '#7C3AED', '#D97706', '#DB2777'],
+                            borderColor: '#FFFFFF',
                             borderWidth: 2
                         }]
                     },
@@ -202,13 +202,13 @@
                         maintainAspectRatio: false,
                         cutout: '62%',
                         plugins: {
-                            legend: { position: 'bottom', labels: { color: '#E2E8F0', boxWidth: 12 } }
+                            legend: { position: 'bottom', labels: { color: '#334155', boxWidth: 12 } }
                         }
                     }
                 });
             }
 
-            // 3. Timeline Line Chart (Neon Emerald & Cyan)
+            // 3. Timeline Line Chart
             const lineCtx = document.getElementById('statsTimelineChart');
             if (lineCtx && window.Chart) {
                 new Chart(lineCtx, {
@@ -218,12 +218,12 @@
                         datasets: [{
                             label: 'Số bài học & bài tập hoàn thành',
                             data: timelineCounts,
-                            borderColor: '#10B981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.16)',
+                            borderColor: '#059669',
+                            backgroundColor: 'rgba(5, 150, 105, 0.14)',
                             fill: true,
                             tension: 0.35,
                             pointRadius: 4,
-                            pointBackgroundColor: '#00F0FF',
+                            pointBackgroundColor: '#2563EB',
                             pointBorderColor: '#FFFFFF'
                         }]
                     },
@@ -234,15 +234,15 @@
                             y: {
                                 beginAtZero: true,
                                 suggestedMax: 5,
-                                ticks: { stepSize: 1, color: '#94A3B8' },
-                                grid: { color: 'rgba(148, 163, 184, 0.15)' }
+                                ticks: { stepSize: 1, color: '#64748B' },
+                                grid: { color: '#E2E8F0' }
                             },
                             x: {
-                                ticks: { color: '#CBD5E1' },
-                                grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                                ticks: { color: '#334155' },
+                                grid: { color: '#F1F5F9' }
                             }
                         },
-                        plugins: { legend: { labels: { color: '#E2E8F0' } } }
+                        plugins: { legend: { labels: { color: '#334155' } } }
                     }
                 });
             }

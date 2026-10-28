@@ -15,42 +15,18 @@
     };
 }
 
-<!-- Thanh bật/tắt nhanh Danh mục Chủ đề trên Mobile & Tablet (< 992px) -->
-<div class="cp-mobile-Course-drawer-bar">
-    <div class="d-flex align-items-center gap-2 text-truncate">
-        <span class="badge hv-badge-lesson-code font-mono fw-bold">Bài @sub.LessonCode</span>
-        <span class="small text-light fw-semibold text-truncate">@sub.Title</span>
-    </div>
-    <button type="button"
-            id="mobileSidebarToggleBtn"
-            class="btn btn-sm btn-hv-outline flex-shrink-0"
-            onclick="window.HoangVietFlow.toggleMobileSidebar()">
-        <i class="bi bi-list-nested me-1"></i>Danh mục (@Model.CompletedLessonsCount/@Model.TotalLessonsCount)
-    </button>
-</div>
-
 <div class="cp-layout-grid">
-    <!-- ================= CỘT TRÁI: SIDEBAR ĐA CẤP + TÌM KIẾM NHANH + PROGRESS TỪNG CHỦ ĐỀ ================= -->
-    <aside class="cp-sidebar mobile-collapsed" id="coursePlayerSidebar">
+    <!-- ================= CỘT TRÁI: SIDEBAR ĐA CẤP (ACCORDION MENU CHỦ ĐỀ -> BÀI HỌC CON) ================= -->
+    <aside class="cp-sidebar">
         <div class="cp-sidebar-header">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="badge @(Model.CurrentTrackCode == "INTERN_TRACK" ? "hv-track-pill-intern" : "hv-track-pill-detailed") px-2 py-1 fw-bold">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="badge @(Model.CurrentTrackCode == "INTERN_TRACK" ? "hv-track-pill-intern" : "hv-track-pill-detailed") fw-bold">
                     @(Model.CurrentTrackCode == "INTERN_TRACK" ? "MENU 1: THỰC TẬP (5 CHỦ ĐỀ)" : "MENU 2: CHI TIẾT (16 CHỦ ĐỀ)")
                 </span>
-                <span class="font-mono small text-info fw-bold">@Model.CompletedLessonsCount/@Model.TotalLessonsCount bài</span>
+                <span class="font-mono small text-secondary">@Model.CompletedLessonsCount/@Model.TotalLessonsCount bài</span>
             </div>
-            <div class="small text-light fw-semibold">
+            <div class="small text-secondary fw-semibold">
                 @Model.CurrentTrack.Description
-            </div>
-
-            <!-- Ô tìm kiếm / lọc nhanh Bài học con theo thời gian thực -->
-            <div class="hv-sidebar-search-wrap">
-                <i class="bi bi-search hv-sidebar-search-icon"></i>
-                <input type="text"
-                       id="sidebarSearchInput"
-                       class="hv-sidebar-search-input"
-                       placeholder="Tìm nhanh bài học (VD: LINQ, DI, 1.2)..."
-                       oninput="window.HoangVietFlow.filterSidebar(this.value)" />
             </div>
         </div>
 
@@ -61,11 +37,10 @@
                 bool isCurrentTopic = topic.Id == Model.CurrentTopic.Id;
                 int topicDone = topic.SubLessons.Count(s => s.IsCompleted);
                 int topicTotal = topic.SubLessons.Count;
-                int topicPercent = topicTotal == 0 ? 0 : (int)Math.Round((double)topicDone * 100 / topicTotal);
                 string collapseId = $"topicCollapse_{topic.Id}";
                 string headingId = $"topicHeading_{topic.Id}";
 
-                <div class="accordion-item cp-accordion-item @(isCurrentTopic ? "current-topic-group" : "")" data-topic-item>
+                <div class="accordion-item cp-accordion-item @(isCurrentTopic ? "current-topic-group" : "")">
                     <h2 class="accordion-header" id="@headingId">
                         <button class="accordion-button cp-accordion-btn @(isCurrentTopic ? "" : "collapsed")"
                                 type="button"
@@ -79,13 +54,10 @@
                                         CHỦ ĐỀ @topic.TopicNumber.ToString("00")
                                     </span>
                                     <span class="font-mono small @(topicDone == topicTotal && topicTotal > 0 ? "text-success fw-bold" : "text-secondary")">
-                                        @topicDone/@topicTotal bài (@topicPercent%)
+                                        @topicDone/@topicTotal bài
                                     </span>
                                 </div>
                                 <div class="cp-topic-title-text">@topic.Title</div>
-                                <div class="hv-topic-mini-progress">
-                                    <div class="hv-topic-mini-progress-bar" style="width: @(topicPercent)%;"></div>
-                                </div>
                             </div>
                         </button>
                     </h2>
@@ -102,8 +74,7 @@
                                        asp-route-track="@Model.CurrentTrackCode"
                                        asp-route-subLessonId="@item.Id"
                                        class="cp-sublesson-link @(isActive ? "active" : "") @(item.IsCompleted ? "completed" : "")"
-                                       id="sidebarSubLesson_@item.Id"
-                                       data-search-text="@($"{item.LessonCode} {item.Title} {item.SkillCategory}".ToLowerInvariant())">
+                                       id="sidebarSubLesson_@item.Id">
                                         <span class="cp-status-icon" id="sidebarIcon_@item.Id">
                                             @if (item.IsCompleted)
                                             {
@@ -116,8 +87,8 @@
                                         </span>
                                         <div class="flex-grow-1">
                                             <div class="d-flex align-items-center gap-2">
-                                                <span class="font-mono fw-bold small text-info">Bài @item.LessonCode</span>
-                                                <span class="hv-skill-mini-tag font-mono">@item.SkillCategory</span>
+                                                <span class="font-mono fw-bold small text-primary">Bài @item.LessonCode</span>
+                                                <span class="hv-skill-mini-tag">@item.SkillCategory</span>
                                             </div>
                                             <div class="cp-sublesson-title">@item.Title</div>
                                         </div>
@@ -142,136 +113,60 @@
         </div>
     </aside>
 
-    <!-- ================= KHU VỰC NỘI DUNG CHÍNH: MISSION BRIEFING & BENTO WORKSPACE ================= -->
+    <!-- ================= KHU VỰC NỘI DUNG CHÍNH: TRANG RIÊNG CỦA ĐÚNG BÀI HỌC CON ĐANG CHỌN ================= -->
     <section class="cp-main-stage">
         <div class="cp-lesson-container">
 
-            <!-- MISSION BRIEFING HOLO-HEADER (BỐ CỤC 2 CỘT + THANH NHẢY NHANH 4 PHẦN) -->
+            <!-- Breadcrumb & Header của Bài học con -->
             <div class="cp-lesson-header-card">
-                <div class="hv-mission-grid">
-                    <div>
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <span class="badge rounded-pill px-3 py-2 font-mono fw-bold hv-badge-lesson-code">
-                                <i class="bi bi-terminal-fill me-1"></i>BÀI @sub.LessonCode
-                            </span>
-                            <span class="badge rounded-pill px-3 py-2 hv-badge-skill-cat">
-                                <i class="bi bi-cpu-fill me-1"></i>Kỹ năng: @sub.SkillCategory
-                            </span>
-                            <span id="lessonStatusBadge" class="badge rounded-pill px-3 py-2 @(sub.IsCompleted ? "bg-success" : "bg-secondary bg-opacity-50 text-light")">
-                                @if (sub.IsCompleted)
-                                {
-                                    <i class="bi bi-check2-circle me-1"></i><span>Đã hoàn thành</span>
-                                }
-                                else
-                                {
-                                    <i class="bi bi-hourglass-split me-1"></i><span>Chưa hoàn thành (0%)</span>
-                                }
-                            </span>
-                        </div>
-
-                        <div class="text-info small font-mono mb-1">
-                            <i class="bi bi-folder2-open me-1"></i>@Model.CurrentTopic.Title
-                        </div>
-                        <h1 class="cp-lesson-main-title mb-0">
-                            Bài @sub.LessonCode: @sub.Title
-                        </h1>
-
-                        <!-- Thanh điều hướng nhảy nhanh tới 4 khu vực trong bài học -->
-                        <div class="hv-quick-jump-bar">
-                            <a href="#sectionPart1Theory" class="hv-jump-pill">
-                                <i class="bi bi-grid-1x2-fill text-info"></i>01. Lý thuyết Bento
-                            </a>
-                            <a href="#sectionPart2Flow" class="hv-jump-pill">
-                                <i class="bi bi-diagram-3-fill text-success"></i>02. Simulator Luồng 4 Bước
-                            </a>
-                            <a href="#quizSectionCard" class="hv-jump-pill">
-                                <i class="bi bi-patch-check-fill text-warning"></i>03. Thử thách Thực chiến
-                            </a>
-                            <a href="#sectionPart4Stats" class="hv-jump-pill">
-                                <i class="bi bi-radar" style="color: #E9D5FF;"></i>04. Radar Năng lực
-                            </a>
-                        </div>
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <span class="badge rounded-pill px-3 py-2 font-mono fw-bold hv-badge-lesson-code">
+                            BÀI @sub.LessonCode
+                        </span>
+                        <span class="badge rounded-pill px-3 py-2 hv-badge-skill-cat">
+                            <i class="bi bi-cpu me-1"></i>Nhóm kỹ năng: @sub.SkillCategory (+10 điểm)
+                        </span>
+                        <span id="lessonStatusBadge" class="badge rounded-pill px-3 py-2 @(sub.IsCompleted ? "bg-success text-white" : "hv-badge-pending")">
+                            @if (sub.IsCompleted)
+                            {
+                                <i class="bi bi-check2-circle me-1"></i><span>Đã hoàn thành</span>
+                            }
+                            else
+                            {
+                                <i class="bi bi-hourglass-split me-1"></i><span>Chưa hoàn thành (0%)</span>
+                            }
+                        </span>
                     </div>
 
-                    <!-- Cột phải: Hộp Telemetry Nhiệm vụ bài học -->
-                    <div class="hv-mission-telemetry-pod">
-                        <div class="d-flex justify-content-between align-items-center border-bottom border-secondary border-opacity-25 pb-2">
-                            <span class="font-mono small text-secondary">MODULE TELEMETRY</span>
-                            <span class="font-mono badge bg-dark text-info border border-info border-opacity-25">
-                                #@Model.GlobalLessonNumber / @Model.TotalLessonsCount
-                            </span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="small text-secondary">Phần thưởng hoàn thành:</span>
-                            <span class="font-mono fw-bold text-warning">+10 EXP Kỹ năng</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="small text-secondary">Số mắt xích thực thi:</span>
-                            <span class="font-mono fw-bold text-info">@steps.Count Nodes C#</span>
-                        </div>
-                        <a href="@sub.OfficialDocUrl" target="_blank" rel="noopener noreferrer"
-                           class="btn btn-sm btn-hv-outline w-100 mt-1">
-                            <i class="bi bi-box-arrow-up-right me-1"></i>Tài liệu chuẩn Microsoft Learn
-                        </a>
-                    </div>
+                    <a href="@sub.OfficialDocUrl" target="_blank" rel="noopener noreferrer"
+                       class="btn btn-sm btn-hv-outline">
+                        <i class="bi bi-box-arrow-up-right me-1"></i>Tài liệu chuẩn Microsoft Learn
+                    </a>
                 </div>
+
+                <div class="text-secondary small fw-medium mb-1">@Model.CurrentTopic.Title</div>
+                <h1 class="cp-lesson-main-title mb-0">
+                    Bài @sub.LessonCode: @sub.Title
+                </h1>
             </div>
 
-            <!-- ================= PHẦN 1: LÝ THUYẾT (TRUE ASYMMETRIC BENTO GRID 12 CỘT + NÚT ĐỔI CHẾ ĐỘ ĐỌC) ================= -->
-            <div class="cp-section-card" id="sectionPart1Theory">
+            <!-- ================= PHẦN 1: LÝ THUYẾT ================= -->
+            <div class="cp-section-card">
                 <div class="cp-section-header">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="cp-section-number">PHẦN 1 // BENTO MATRIX</div>
-                        <div>
-                            <h2 class="cp-section-title mb-0">Lý thuyết cốt lõi & Tư duy đọc hiểu mắt xích</h2>
-                            <div class="small text-secondary">Bố cục Bento Grid thông minh: Bản chất (💡), Sơ đồ bộ nhớ (🖼️), Bảng phân tích (📊), Giải phẫu cú pháp (🔍) & Lưu ý thực chiến (⚠️)</div>
-                        </div>
-                    </div>
-                    <button type="button"
-                            id="bentoLayoutToggleBtn"
-                            class="btn btn-sm btn-hv-outline font-mono"
-                            onclick="window.HoangVietFlow.toggleBentoLayout()">
-                        <i class="bi bi-layout-split me-1"></i>Đổi chế độ: Lưới 2 Cột / 1 Cột Rộng
-                    </button>
+                    <div class="cp-section-number">PHẦN 1</div>
+                    <h2 class="cp-section-title mb-0">Lý thuyết cốt lõi & Tư duy đọc hiểu mắt xích</h2>
                 </div>
-                <div class="cp-theory-content" id="theoryBentoContainer">
+                <div class="cp-theory-content">
                     @Html.Raw(LessonContentFormatter.RenderTheoryBentoHtml(sub.Part1_Theory))
                 </div>
             </div>
 
-            <!-- ================= PHẦN 2: LIVE EXECUTION PIPELINE SIMULATOR & CYBER-IDE CÓ SỐ DÒNG ================= -->
-            <div class="cp-section-card" id="sectionPart2Flow">
+            <!-- ================= PHẦN 2: THỰC HÀNH LUỒNG & CODE ================= -->
+            <div class="cp-section-card">
                 <div class="cp-section-header">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="cp-section-number sec-part-2">PHẦN 2 // PIPELINE SIMULATOR</div>
-                        <div>
-                            <h2 class="cp-section-title mb-0">Mô phỏng Luồng Thực Thi & Giải Phẫu Code C#</h2>
-                            <div class="small text-secondary">Bấm vào từng Node <strong>[Bước 1] ➔ [Bước 4]</strong> hoặc bật <strong>Tự động mô phỏng (Auto-Play)</strong> để theo dõi đường đi của dữ liệu</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Thanh điều khiển Mô phỏng Pipeline (Trước / Auto-Play / Tiếp) -->
-                <div class="hv-pipeline-control-bar">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-dark text-info border border-info border-opacity-50 font-mono">
-                            <i class="bi bi-cpu me-1"></i>PIPELINE CONTROLLER
-                        </span>
-                        <span class="small text-secondary d-none d-md-inline">
-                            Di chuột vào từng dòng giải thích bên dưới để highlight dòng lệnh tương ứng trên khung Code!
-                        </span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <button type="button" class="btn btn-sm btn-hv-outline font-mono" onclick="window.HoangVietFlow.prevStep()">
-                            <i class="bi bi-skip-backward-fill me-1"></i>Bước trước
-                        </button>
-                        <button type="button" id="autoPlayFlowBtn" class="btn btn-sm btn-hv-orange font-mono" onclick="window.HoangVietFlow.toggleAutoPlay()">
-                            <i class="bi bi-play-fill me-1"></i>Tự động chạy luồng
-                        </button>
-                        <button type="button" class="btn btn-sm btn-hv-outline font-mono" onclick="window.HoangVietFlow.nextStep()">
-                            Bước tiếp<i class="bi bi-skip-forward-fill ms-1"></i>
-                        </button>
-                    </div>
+                    <div class="cp-section-number sec-part-2">PHẦN 2</div>
+                    <h2 class="cp-section-title mb-0">Thực hành Luồng & Code: Hộp Bước Tương Tác (Interactive Flow Step Boxes)</h2>
                 </div>
 
                 <!-- Chuỗi Hộp Bước Tương Tác [Bước 1] ➔ [Bước 2] ➔ [Bước 3] ➔ [Bước 4] -->
@@ -288,19 +183,17 @@
                                 data-step-detail="@st.StepDetail"
                                 data-step-code="@st.CodeSnippet"
                                 onclick="window.HoangVietFlow.selectStep(this)">
-                            <div class="flow-step-badge">
-                                <i class="bi bi-record-circle-fill"></i>NODE 0@(st.StepNumber)
-                            </div>
+                            <div class="flow-step-badge">BƯỚC @st.StepNumber</div>
                             <div class="flow-step-title">@st.StepTitle</div>
                             <div class="flow-step-hint">
-                                <i class="bi bi-hand-index-thumb me-1"></i>Click nạp vào Inspector
+                                <i class="bi bi-hand-index-thumb me-1"></i>Click xem chi tiết & Code
                             </div>
                         </button>
 
                         @if (i < steps.Count - 1)
                         {
                             <div class="flow-step-arrow" aria-hidden="true">
-                                <i class="bi bi-chevron-double-right"></i>
+                                <i class="bi bi-arrow-right-circle-fill"></i>
                             </div>
                         }
                     }
@@ -316,16 +209,16 @@
                                     <span id="activeStepBadge" class="badge hv-active-step-pill font-mono fw-bold px-3 py-2">
                                         ĐANG XEM: BƯỚC @firstStep.StepNumber
                                     </span>
-                                    <span class="small text-info font-mono">📥 Input ➔ ⚙️ Engine ➔ 📤 Output</span>
+                                    <span class="small text-primary font-mono fw-semibold">📥 Input ➔ ⚙️ Under the Hood ➔ 📤 Output</span>
                                 </div>
-                                <h3 id="activeStepTitle" class="h5 fw-bold text-white mb-3">@firstStep.StepTitle</h3>
+                                <h3 id="activeStepTitle" class="h5 fw-bold mb-3" style="color: #0F172A;">@firstStep.StepTitle</h3>
                                 <div id="activeStepDetail" class="flow-detail-structured">
                                     @firstStep.StepDetail
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Cột phải: Cyber-IDE Code C# (Có số dòng) & Giải thích chi tiết từng dòng lệnh -->
+                        <!-- Cột phải: Code C# (Syntax Highlighting) & Giải thích chi tiết từng dòng lệnh -->
                         <div class="col-lg-7">
                             <div class="flow-code-panel h-100">
                                 <div class="flow-code-header">
@@ -333,20 +226,16 @@
                                         <span class="code-dot bg-danger"></span>
                                         <span class="code-dot bg-warning"></span>
                                         <span class="code-dot bg-success"></span>
-                                        <span class="font-mono small text-info ms-1 fw-bold" id="activeCodeFileLabel">
+                                        <span class="font-mono small text-light ms-1" id="activeCodeFileLabel">
                                             Step@(firstStep.StepNumber)_Sample.cs
                                         </span>
                                     </div>
-                                    <button type="button" class="btn btn-sm btn-hv-outline py-0 px-2 font-mono"
+                                    <button type="button" class="btn btn-sm btn-outline-light py-0 px-2 font-mono"
                                             onclick="window.HoangVietFlow.copyActiveCode()" id="copyCodeBtn">
                                         <i class="bi bi-clipboard me-1"></i>Copy C#
                                     </button>
                                 </div>
                                 <pre class="flow-code-pre mb-0"><code id="activeStepCode" data-raw-code="@firstStep.CodeSnippet">@firstStep.CodeSnippet</code></pre>
-                                <div class="hv-ide-status-footer">
-                                    <span><i class="bi bi-braces-asterisk text-info me-1"></i>C# 13 // .NET 10.0 SDK</span>
-                                    <span>UTF-8 • Interactive Line-Hover Enabled</span>
-                                </div>
                                 <div id="activeStepCodeAnatomy" class="flow-code-anatomy-panel"></div>
                             </div>
                         </div>
@@ -354,30 +243,16 @@
                 </div>
             </div>
 
-            <!-- ================= PHẦN 3: BÀI TẬP KIỂM TRA (CYBER CHALLENGE ARENA 2 CỘT) ================= -->
+            <!-- ================= PHẦN 3: BÀI TẬP KIỂM TRA & LƯU TIẾN ĐỘ VÀO SQL SERVER ================= -->
             <div class="cp-section-card" id="quizSectionCard">
                 <div class="cp-section-header">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="cp-section-number sec-part-3">PHẦN 3 // CYBER CHALLENGE</div>
-                        <div>
-                            <h2 class="cp-section-title mb-0">Bài tập kiểm tra & Xác nhận hoàn thành bài học</h2>
-                            <div class="small text-secondary">Chọn đáp án đúng và bấm <strong>"Hoàn thành bài học"</strong> để lưu vào SQL Server LocalDB và cộng điểm năng lực</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Banner Phần thưởng Nhiệm vụ -->
-                <div class="hv-quiz-reward-banner">
-                    <div class="small text-light">
-                        <i class="bi bi-trophy-fill text-warning me-2"></i>
-                        <strong>NHIỆM VỤ MỞ KHÓA:</strong> Trả lời chính xác câu hỏi thực chiến dưới đây để nhận <strong class="text-info">+10 EXP</strong> vào nhóm kỹ năng <strong>@sub.SkillCategory</strong>.
-                    </div>
-                    <span class="badge bg-dark text-secondary font-mono">4 Lựa chọn A • B • C • D</span>
+                    <div class="cp-section-number sec-part-3">PHẦN 3</div>
+                    <h2 class="cp-section-title mb-0">Bài tập kiểm tra & Xác nhận hoàn thành bài học</h2>
                 </div>
 
                 <div class="cp-quiz-question-box mb-3">
-                    <div class="fw-bold text-white" style="font-size: 1.08rem; line-height: 1.65;">
-                        <i class="bi bi-patch-question-fill text-info me-2"></i>@sub.Part3_Question
+                    <div class="fw-bold" style="font-size: 1.06rem; line-height: 1.65; color: #0F172A;">
+                        <i class="bi bi-patch-question-fill text-primary me-2"></i>@sub.Part3_Question
                     </div>
                 </div>
 
@@ -401,7 +276,7 @@
                 <!-- Khung phản hồi Giải thích Đáp án -->
                 <div id="quizFeedbackBox" class="alert d-none mb-3" role="alert"></div>
 
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 pt-3 border-top border-secondary border-opacity-25">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 pt-3 border-top">
                     <div class="d-flex gap-2">
                         @if (Model.PreviousSubLessonId.HasValue)
                         {
@@ -440,14 +315,11 @@
             </div>
 
             <!-- ================= BẢNG THỐNG KÊ NĂNG LỰC NGAY TẠI TRANG CHỦ ================= -->
-            <div class="cp-section-card" id="sectionPart4Stats">
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div class="cp-section-card">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 pb-2 border-bottom">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="cp-section-number sec-part-stats">THỐNG KÊ // TELEMETRY</div>
-                        <div>
-                            <h2 class="cp-section-title mb-0">Bảng Thống Kê Năng Lực & Tiến Độ Học Tập Thực Tế</h2>
-                            <div class="small text-secondary">Tự động cập nhật trực tiếp từ mức <strong>0%</strong> khi bạn hoàn thành từng bài học con</div>
-                        </div>
+                        <div class="cp-section-number sec-part-stats">THỐNG KÊ</div>
+                        <h2 class="cp-section-title mb-0">Bảng Thống Kê Năng Lực & Tiến Độ Học Tập Thực Tế</h2>
                     </div>
                     <a asp-controller="Home" asp-action="Stats" class="btn btn-sm btn-hv-outline">
                         <i class="bi bi-arrows-fullscreen me-1"></i>Mở trang Thống kê chi tiết
@@ -459,10 +331,10 @@
                     <div class="col-lg-6">
                         <div class="cp-chart-box h-100">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h3 class="h6 fw-bold text-white mb-0">
-                                    <i class="bi bi-bullseye text-info me-2"></i>Biểu đồ Năng lực 6 Nhóm Kỹ Năng (0% ➔ 100%)
+                                <h3 class="h6 fw-bold mb-0" style="color: #0F172A;">
+                                    <i class="bi bi-bullseye text-primary me-2"></i>Biểu đồ Năng lực 6 Nhóm Kỹ Năng (0% ➔ 100%)
                                 </h3>
-                                <span class="badge bg-dark text-info border border-info border-opacity-25 font-mono">Radar Chart</span>
+                                <span class="badge bg-light text-secondary border font-mono">Radar Chart</span>
                             </div>
                             <div style="height: 290px; position: relative;">
                                 <canvas id="homeSkillRadarChart"></canvas>
@@ -474,10 +346,10 @@
                     <div class="col-lg-6">
                         <div class="cp-chart-box h-100">
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h3 class="h6 fw-bold text-white mb-0">
+                                <h3 class="h6 fw-bold mb-0" style="color: #0F172A;">
                                     <i class="bi bi-graph-up-arrow text-success me-2"></i>Tiến độ Bài học & Bài tập hoàn thành theo ngày
                                 </h3>
-                                <span class="badge bg-dark text-success border border-success border-opacity-25 font-mono">Timeline Line Chart</span>
+                                <span class="badge bg-light text-secondary border font-mono">Timeline Line Chart</span>
                             </div>
                             <div style="height: 290px; position: relative;">
                                 <canvas id="homeTimelineLineChart"></canvas>
