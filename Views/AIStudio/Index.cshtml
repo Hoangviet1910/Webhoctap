@@ -6,58 +6,64 @@
 <div class="container-fluid py-4 px-3 px-lg-4" style="max-width: 1480px;">
     <div class="row g-4 align-items-stretch" style="min-height: calc(100vh - 125px);">
 
-        <!-- ================= CỘT TRÁI (35%): NHÂN VẬT HOẠT ẢNH 2D VIỆTBOT LỚN & 3 CHẾ ĐỘ CHỌN NHANH ================= -->
+        <!-- ================= CỘT TRÁI (35%): SÂN KHẤU HOLOGRAM 3D-READY & 3 CHẾ ĐỘ CHỌN NHANH ================= -->
         <div class="col-lg-4 d-flex flex-column">
             <div class="cp-section-card h-100 d-flex flex-column justify-content-between mb-0">
                 <div>
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="badge rounded-pill px-3 py-2" style="background: rgba(249,115,22,0.18); color: #FB923C; border: 1px solid rgba(249,115,22,0.4);">
-                            <i class="bi bi-stars me-1"></i>VIỆTBOT 2D STUDIO
+                        <span class="badge rounded-pill px-3 py-2 hv-track-pill-intern fw-bold">
+                            <i class="bi bi-stars me-1"></i>VIỆTBOT HOLO-STUDIO
                         </span>
                         <span id="studioMoodBadge" class="badge bg-success bg-opacity-25 text-success px-3 py-2">
                             <span class="spinner-grow spinner-grow-sm me-1" style="width: 7px; height: 7px;"></span>Sẵn sàng hỗ trợ
                         </span>
                     </div>
 
-                    <!-- Sân khấu Nhân vật hoạt ảnh 2D ViệtBot kích thước lớn -->
-                    <div class="studio-character-stage text-center py-4 my-2 rounded-4"
-                         style="background: radial-gradient(circle at center, rgba(249,115,22,0.16) 0%, rgba(15,23,42,0.92) 72%); border: 1px solid rgba(148,163,184,0.18);">
-                        <div class="studio-character-float d-inline-block position-relative">
+                    <!-- Sân khấu Đế chiếu Hologram tách riêng khỏi Viewport nhân vật (3D-Ready Architecture) -->
+                    <div class="studio-character-stage hv-hologram-pod text-center py-4 my-2">
+                        <!--
+                            [3D-READY VIEWPORT]:
+                            Khi nâng cấp lên Three.js / WebGL 3D Model, chỉ cần mount <canvas> vào #mascotRenderViewport
+                            và đổi data-render-mode="3d-webgl". Phần đế & hào quang .hv-hologram-pod bên ngoài giữ nguyên.
+                        -->
+                        <div id="mascotRenderViewport"
+                             class="hv-mascot-viewport hv-mascot-viewport-studio studio-character-float"
+                             data-render-mode="2d-svg">
                             <svg viewBox="0 0 180 180" width="165" height="165" id="studioMascotSvg">
                                 <defs>
                                     <linearGradient id="studioVisor" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#0F172A" />
+                                        <stop offset="0%" stop-color="#050811" />
                                         <stop offset="100%" stop-color="#1E293B" />
                                     </linearGradient>
                                     <linearGradient id="studioSuit" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#F97316" />
-                                        <stop offset="100%" stop-color="#EA580C" />
+                                        <stop offset="0%" stop-color="#00F0FF" />
+                                        <stop offset="100%" stop-color="#3B82F6" />
                                     </linearGradient>
                                 </defs>
                                 <!-- Vòng hào quang chuyển động -->
-                                <circle cx="90" cy="92" r="78" fill="rgba(15,23,42,0.85)" stroke="#F97316" stroke-width="3.5" stroke-dasharray="10 6" />
+                                <circle cx="90" cy="92" r="78" fill="rgba(6,9,19,0.85)" stroke="#00F0FF" stroke-width="3.5" stroke-dasharray="10 6" />
                                 <!-- Ăng-ten phát sáng -->
                                 <line x1="90" y1="12" x2="90" y2="34" stroke="#94A3B8" stroke-width="5" stroke-linecap="round" />
                                 <circle cx="90" cy="12" r="9" fill="#10B981" id="studioAntennaLight" />
                                 <!-- Mũ bảo hiểm 2D -->
-                                <rect x="36" y="34" width="108" height="86" rx="38" fill="#F8FAFC" stroke="#334155" stroke-width="4" />
+                                <rect x="36" y="34" width="108" height="86" rx="38" fill="#F8FAFC" stroke="#38BDF8" stroke-width="4" />
                                 <!-- Tai nghe 2 bên -->
                                 <rect x="22" y="58" width="16" height="38" rx="8" fill="url(#studioSuit)" />
                                 <rect x="142" y="58" width="16" height="38" rx="8" fill="url(#studioSuit)" />
                                 <!-- Màn hình gương mặt kỹ thuật số -->
-                                <rect x="48" y="48" width="84" height="58" rx="24" fill="url(#studioVisor)" stroke="#38BDF8" stroke-width="3" />
+                                <rect x="48" y="48" width="84" height="58" rx="24" fill="url(#studioVisor)" stroke="#00F0FF" stroke-width="3" />
                                 <!-- Đôi mắt biểu cảm -->
                                 <g id="studioMascotEyes">
-                                    <circle cx="70" cy="72" r="8.5" fill="#10B981" />
-                                    <circle cx="110" cy="72" r="8.5" fill="#10B981" />
+                                    <circle cx="70" cy="72" r="8.5" fill="#00F0FF" />
+                                    <circle cx="110" cy="72" r="8.5" fill="#00F0FF" />
                                     <circle cx="73" cy="69" r="3" fill="#FFFFFF" />
                                     <circle cx="113" cy="69" r="3" fill="#FFFFFF" />
                                 </g>
                                 <!-- Miệng biểu cảm -->
-                                <path id="studioMascotMouth" d="M 74 90 Q 90 101 106 90" stroke="#F97316" stroke-width="4.5" fill="none" stroke-linecap="round" />
+                                <path id="studioMascotMouth" d="M 74 90 Q 90 101 106 90" stroke="#10B981" stroke-width="4.5" fill="none" stroke-linecap="round" />
                                 <!-- Thân áo C# 10 -->
                                 <path d="M 52 120 L 128 120 L 140 160 L 40 160 Z" fill="url(#studioSuit)" />
-                                <text x="90" y="147" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-weight="800" font-size="18">C# .NET 10</text>
+                                <text x="90" y="147" text-anchor="middle" fill="#050811" font-family="JetBrains Mono, monospace" font-weight="800" font-size="18">C# .NET 10</text>
                             </svg>
                         </div>
 
@@ -69,8 +75,8 @@
 
                     <!-- 3 Chế độ chọn nhanh -->
                     <div class="mt-3">
-                        <div class="small fw-bold text-uppercase text-secondary mb-2 font-mono">
-                            <i class="bi bi-lightning-charge-fill text-warning me-1"></i>3 Chế độ huấn luyện nhanh
+                        <div class="small fw-bold text-uppercase text-info mb-2 font-mono">
+                            <i class="bi bi-lightning-charge-fill me-1"></i>3 Chế độ huấn luyện nhanh
                         </div>
                         <div class="d-grid gap-2">
                             <button type="button" class="btn text-start p-3 rounded-3 studio-mode-btn"
@@ -144,7 +150,7 @@
                 <div id="studioChatMessages" class="flex-grow-1 py-3 px-2 my-2 overflow-auto" style="max-height: 62vh; min-height: 380px;">
                     <div class="studio-msg-row assistant mb-3">
                         <div class="studio-msg-bubble assistant">
-                            <div class="fw-bold text-warning small mb-1">
+                            <div class="fw-bold text-info small mb-1">
                                 <i class="bi bi-robot me-1"></i>ViệtBot 2D - Trợ giảng C#
                             </div>
                             <div>
@@ -160,7 +166,7 @@
                     <div class="input-group">
                         <input type="text"
                                id="studioChatInput"
-                               class="form-control bg-dark text-light border-secondary py-2 px-3"
+                               class="form-control bg-dark text-light border-info border-opacity-50 py-2 px-3"
                                placeholder="Nhập câu hỏi cho ChatBot..."
                                style="font-size: 16px; border-radius: 10px 0 0 10px;" />
                         <button type="submit" id="studioSendBtn" class="btn btn-hv-orange px-4 fw-bold" style="border-radius: 0 10px 10px 0;">
@@ -178,6 +184,16 @@
     <script>
         window.HoangVietStudio = {
             setMood: function (mood) {
+                const viewport = document.getElementById('mascotRenderViewport');
+                if (viewport) {
+                    viewport.setAttribute('data-current-mood', mood || 'happy');
+                }
+
+                // [3D-UPGRADE-HOOK]: Nơi gắn trigger đổi animation 3D (Three.js / WebGL AnimationMixer) sau này
+                if (window.HoangViet3DMascot && typeof window.HoangViet3DMascot.setMood === 'function') {
+                    window.HoangViet3DMascot.setMood(mood);
+                }
+
                 const badge = document.getElementById('studioMoodBadge');
                 const expText = document.getElementById('studioExpressionText');
                 const mouth = document.getElementById('studioMascotMouth');
@@ -238,7 +254,7 @@
                 } else {
                     row.innerHTML = `
                         <div class="studio-msg-bubble assistant">
-                            <div class="fw-bold text-warning small mb-1"><i class="bi bi-robot me-1"></i>ViệtBot 2D - Trợ giảng C#</div>
+                            <div class="fw-bold text-info small mb-1"><i class="bi bi-robot me-1"></i>ViệtBot 2D - Trợ giảng C#</div>
                             <div>${htmlOrText}</div>
                         </div>`;
                 }
@@ -250,10 +266,10 @@
             formatReply: function (raw) {
                 if (!raw) return '';
                 return raw
-                    .replace(/```csharp([\s\S]*?)```/g, '<pre class="bg-black text-info p-3 rounded-3 mt-2 mb-2 font-mono" style="font-size:0.88rem;"><code>$1</code></pre>')
-                    .replace(/```([\s\S]*?)```/g, '<pre class="bg-black text-info p-3 rounded-3 mt-2 mb-2 font-mono" style="font-size:0.88rem;"><code>$1</code></pre>')
+                    .replace(/```csharp([\s\S]*?)```/g, '<pre class="bg-black text-info p-3 rounded-3 mt-2 mb-2 font-mono border border-info border-opacity-25" style="font-size:0.88rem;"><code>$1</code></pre>')
+                    .replace(/```([\s\S]*?)```/g, '<pre class="bg-black text-info p-3 rounded-3 mt-2 mb-2 font-mono border border-info border-opacity-25" style="font-size:0.88rem;"><code>$1</code></pre>')
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/`([^`]+)`/g, '<code class="text-warning">$1</code>')
+                    .replace(/`([^`]+)`/g, '<code class="hv-inline-code">$1</code>')
                     .replace(/\n/g, '<br/>');
             },
 
@@ -290,7 +306,7 @@
                 container.innerHTML = `
                     <div class="studio-msg-row assistant mb-3">
                         <div class="studio-msg-bubble assistant">
-                            <div class="fw-bold text-warning small mb-1">
+                            <div class="fw-bold text-info small mb-1">
                                 <i class="bi bi-robot me-1"></i>ViệtBot 2D - Trợ giảng C#
                             </div>
                             <div>Cuộc trò chuyện đã được làm mới. Hãy chọn một chế độ bên trái hoặc nhập câu hỏi mới cho ViệtBot nhé!</div>

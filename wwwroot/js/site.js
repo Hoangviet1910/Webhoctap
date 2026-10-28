@@ -1,16 +1,19 @@
 // ============================================================================
-// HOÀNG VIỆT (.NET 10 LEARNING PLATFORM)
-// 1. Hộp Bước Tương Tác (Interactive Flow Step Boxes)
-// 2. Bài tập kiểm tra & Cập nhật tiến độ SQL Server + Biểu đồ Chart.js
-// 3. Trợ lý ảo 2D Thông Minh (Dual-Mode + IMemoryCache 24h)
+// HOÀNG VIỆT (.NET 10 LEARNING PLATFORM) — NEXT-GEN CYBER-HUD EDITION
+// 1. Live Pipeline Simulator (Auto-Play, Prev/Next, Line-Numbered Cyber-IDE)
+// 2. Interactive Line-Hover Sync (Code Anatomy <-> C# Editor) & Bento Switcher
+// 3. Live Sidebar Search Filter & Mouse-Tracking Spotlight Cards
+// 4. Gamified Quiz Arena + Instant SQL Server & Chart.js Telemetry Update
+// 5. 2D/3D-Ready AI Mascot (Dual-Mode + IMemoryCache 24h)
 // ============================================================================
 
 (function () {
     let homeRadarChartInstance = null;
     let homeTimelineChartInstance = null;
+    let autoPlayIntervalId = null;
 
     // ------------------------------------------------------------------------
-    // 1. MODULE HỘP BƯỚC TƯƠNG TÁC (PHẦN 2)
+    // 1. MODULE HỘP BƯỚC TƯƠNG TÁC, PIPELINE SIMULATOR & CYBER-IDE
     // ------------------------------------------------------------------------
     function escapeHtml(str) {
         return (str || '')
@@ -58,8 +61,6 @@
                 </div>`;
         }
 
-        // For earlier lessons where StepDetail is a unified sentence, preserve 100% of the original text
-        // while still presenting the 3 structured Input / Under-the-Hood / Output cards clearly:
         const cleanTitle = (stepTitle || 'Bước thực thi').replace(/^\d+\.\s*/, '');
         const firstCodeLine = ((stepCode || '').split('\n').find(l => l.trim() && !l.trim().startsWith('//')) || '').trim();
 
@@ -84,11 +85,10 @@
         const kwRegex = /\b(using|namespace|public|private|protected|internal|static|readonly|const|sealed|abstract|virtual|override|partial|class|record|struct|interface|enum|void|int|long|double|decimal|bool|string|char|var|object|new|return|if|else|switch|case|default|for|foreach|while|do|in|break|continue|try|catch|finally|throw|async|await|out|ref|params|this|base|true|false|null|from|where|orderby|select|get|set|init|with)\b/g;
         const typeRegex = /\b(List|Dictionary|HashSet|Queue|Stack|ArrayList|KeyValuePair|Func|Action|Predicate|Task|IEnumerable|IQueryable|Guid|DateTime|TimeSpan|Console|Math|Convert|StringBuilder|Exception|ArgumentException|InvalidOperationException|ControllerBase|IActionResult|HttpContext|WebApplication)\b/g;
 
-        return lines.map(line => {
+        return lines.map((line, index) => {
             let commentPart = '';
             let codePart = line;
 
-            // Find // comment outside of quotes
             let inQuotes = false;
             for (let i = 0; i < line.length - 1; i++) {
                 if (line[i] === '"' && (i === 0 || line[i - 1] !== '\\')) {
@@ -101,7 +101,6 @@
                 }
             }
 
-            // Tokenize strings in codePart first
             const strings = [];
             let tokenized = codePart.replace(/\$?"(?:\\.|[^"\\])*"/g, m => {
                 const idx = strings.length;
@@ -122,8 +121,10 @@
                 tokenized += `<span class="cs-comment">${escapeHtml(commentPart)}</span>`;
             }
 
-            return tokenized;
-        }).join('\n');
+            const lineNum = index + 1;
+            const formattedNum = lineNum < 10 ? `0${lineNum}` : `${lineNum}`;
+            return `<div class="hv-code-line-row" data-code-line="${lineNum}"><span class="hv-line-gutter">${formattedNum}</span><span>${tokenized || ' '}</span></div>`;
+        }).join('');
     }
 
     function explainSingleCSharpLine(line) {
@@ -132,7 +133,6 @@
             return `Chú thích giải thích: ${trimmed.replace(/^\/\/\s*/, '')}`;
         }
 
-        // Check inline comment
         const commentIdx = trimmed.indexOf('//');
         if (commentIdx > 0) {
             const note = trimmed.substring(commentIdx + 2).trim();
@@ -171,9 +171,13 @@
         lines.forEach((line, idx) => {
             const trimmed = line.trim();
             if (!trimmed || trimmed === '{' || trimmed === '}' || trimmed === '};' || trimmed === ');') return;
+            const lineNum = idx + 1;
             items.push(`
-                <div class="hv-code-anatomy-row">
-                    <span class="hv-code-line-badge font-mono">Dòng ${idx + 1}</span>
+                <div class="hv-code-anatomy-row"
+                     data-target-line="${lineNum}"
+                     onmouseenter="window.HoangVietFlow.highlightLine(${lineNum}, true)"
+                     onmouseleave="window.HoangVietFlow.highlightLine(${lineNum}, false)">
+                    <span class="hv-code-line-badge font-mono">Dòng ${lineNum}</span>
                     <div class="hv-code-anatomy-content">
                         <code class="hv-code-anatomy-snippet">${escapeHtml(trimmed)}</code>
                         <div class="hv-code-anatomy-desc">➔ ${escapeHtml(explainSingleCSharpLine(trimmed))}</div>
@@ -184,7 +188,7 @@
         if (items.length === 0) return '';
         return `
             <div class="hv-code-anatomy-header">
-                <i class="bi bi-search me-1 text-warning"></i>Giải thích chi tiết từng dòng lệnh (Line-by-Line Code Anatomy)
+                <i class="bi bi-search me-1 text-info"></i>Giải thích chi tiết từng dòng lệnh (Di chuột vào từng dòng để đối chiếu trên IDE)
             </div>
             <div class="hv-code-anatomy-list">
                 ${items.join('')}
@@ -192,8 +196,50 @@
     }
 
     window.HoangVietFlow = {
-        selectStep: function (buttonEl) {
+        toggleMobileSidebar: function () {
+            const sidebar = document.getElementById('coursePlayerSidebar');
+            if (!sidebar) return;
+            sidebar.classList.toggle('mobile-collapsed');
+        },
+
+        filterSidebar: function (query) {
+            const q = (query || '').trim().toLowerCase();
+            const topicItems = document.querySelectorAll('#sidebarTopicAccordion [data-topic-item]');
+            topicItems.forEach(topicEl => {
+                const links = topicEl.querySelectorAll('.cp-sublesson-link');
+                let hasVisible = false;
+                links.forEach(link => {
+                    const text = (link.getAttribute('data-search-text') || link.textContent || '').toLowerCase();
+                    const matched = !q || text.includes(q);
+                    link.style.display = matched ? '' : 'none';
+                    if (matched) hasVisible = true;
+                });
+                topicEl.style.display = hasVisible ? '' : 'none';
+
+                const collapseEl = topicEl.querySelector('.accordion-collapse');
+                if (q && hasVisible && collapseEl && !collapseEl.classList.contains('show')) {
+                    collapseEl.classList.add('show');
+                }
+            });
+        },
+
+        toggleBentoLayout: function () {
+            const grid = document.querySelector('#theoryBentoContainer .hv-bento-grid');
+            if (!grid) return;
+            grid.classList.toggle('bento-single-col');
+        },
+
+        highlightLine: function (lineNum, active) {
+            const row = document.querySelector(`#activeStepCode .hv-code-line-row[data-code-line="${lineNum}"]`);
+            if (!row) return;
+            row.classList.toggle('line-highlighted', !!active);
+        },
+
+        selectStep: function (buttonEl, fromAutoPlay) {
             if (!buttonEl) return;
+            if (!fromAutoPlay && autoPlayIntervalId) {
+                this.stopAutoPlay();
+            }
 
             const allBoxes = document.querySelectorAll('#interactiveFlowChain .flow-step-box');
             allBoxes.forEach(b => b.classList.remove('active'));
@@ -204,12 +250,19 @@
             const stepDetail = buttonEl.getAttribute('data-step-detail') || '';
             const stepCode = buttonEl.getAttribute('data-step-code') || '';
 
+            const inspectorEl = document.getElementById('flowStepInspector');
             const badgeEl = document.getElementById('activeStepBadge');
             const titleEl = document.getElementById('activeStepTitle');
             const detailEl = document.getElementById('activeStepDetail');
             const codeEl = document.getElementById('activeStepCode');
             const anatomyEl = document.getElementById('activeStepCodeAnatomy');
             const fileLabelEl = document.getElementById('activeCodeFileLabel');
+
+            if (inspectorEl) {
+                inspectorEl.classList.remove('hv-step-switching');
+                void inspectorEl.offsetWidth;
+                inspectorEl.classList.add('hv-step-switching');
+            }
 
             if (badgeEl) badgeEl.textContent = `ĐANG XEM: BƯỚC ${stepNumber}`;
             if (titleEl) titleEl.textContent = stepTitle;
@@ -224,6 +277,51 @@
             if (fileLabelEl) fileLabelEl.textContent = `Step${stepNumber}_Sample.cs`;
         },
 
+        prevStep: function () {
+            const allBoxes = Array.from(document.querySelectorAll('#interactiveFlowChain .flow-step-box'));
+            if (allBoxes.length === 0) return;
+            const currentIdx = allBoxes.findIndex(b => b.classList.contains('active'));
+            const prevIdx = currentIdx > 0 ? currentIdx - 1 : allBoxes.length - 1;
+            this.selectStep(allBoxes[prevIdx]);
+        },
+
+        nextStep: function (fromAutoPlay) {
+            const allBoxes = Array.from(document.querySelectorAll('#interactiveFlowChain .flow-step-box'));
+            if (allBoxes.length === 0) return;
+            const currentIdx = allBoxes.findIndex(b => b.classList.contains('active'));
+            const nextIdx = currentIdx >= 0 && currentIdx < allBoxes.length - 1 ? currentIdx + 1 : 0;
+            this.selectStep(allBoxes[nextIdx], fromAutoPlay);
+        },
+
+        toggleAutoPlay: function () {
+            if (autoPlayIntervalId) {
+                this.stopAutoPlay();
+                return;
+            }
+            const btn = document.getElementById('autoPlayFlowBtn');
+            if (btn) {
+                btn.innerHTML = '<i class="bi bi-pause-fill me-1"></i>Đang mô phỏng (Dừng)';
+                btn.classList.remove('btn-hv-orange');
+                btn.classList.add('btn-hv-purple');
+            }
+            autoPlayIntervalId = setInterval(() => {
+                this.nextStep(true);
+            }, 3200);
+        },
+
+        stopAutoPlay: function () {
+            if (autoPlayIntervalId) {
+                clearInterval(autoPlayIntervalId);
+                autoPlayIntervalId = null;
+            }
+            const btn = document.getElementById('autoPlayFlowBtn');
+            if (btn) {
+                btn.innerHTML = '<i class="bi bi-play-fill me-1"></i>Tự động chạy luồng';
+                btn.classList.remove('btn-hv-purple');
+                btn.classList.add('btn-hv-orange');
+            }
+        },
+
         copyActiveCode: function () {
             const codeEl = document.getElementById('activeStepCode');
             const btn = document.getElementById('copyCodeBtn');
@@ -233,7 +331,7 @@
             navigator.clipboard.writeText(raw).then(() => {
                 if (btn) {
                     const original = btn.innerHTML;
-                    btn.innerHTML = '<i class="bi bi-check2 me-1"></i>Đã Copy!';
+                    btn.innerHTML = '<i class="bi bi-check2 me-1 text-info"></i>Đã Copy!';
                     setTimeout(() => { btn.innerHTML = original; }, 1600);
                 }
             });
@@ -317,22 +415,26 @@
                 if (data && data.success) {
                     feedbackBox.className = 'alert alert-success mb-3';
                     const pointsMsg = data.addedPoints > 0
-                        ? `Đã cộng <strong>+${data.addedPoints} điểm</strong> vào kỹ năng <strong>${data.skillName}</strong> (Hiện tại: ${data.updatedSkillScore}%).`
+                        ? `Đã cộng <strong>+${data.addedPoints} EXP</strong> vào kỹ năng <strong>${data.skillName}</strong> (Hiện tại: ${data.updatedSkillScore}%).`
                         : `Bài học này đã được ghi nhận hoàn thành trong Database.`;
 
                     feedbackBox.innerHTML =
                         `<div class="fw-bold mb-1"><i class="bi bi-check-circle-fill me-2"></i>Chính xác! Chúc mừng Hoàng Việt đã hoàn thành Bài ${data.lessonCode}!</div>` +
                         `<div class="mb-1">${explanation}</div>` +
-                        `<div class="small text-warning font-mono">${pointsMsg}</div>`;
+                        `<div class="small text-info font-mono">${pointsMsg}</div>`;
 
-                    // Cập nhật thanh tiến độ trên Header
+                    // Cập nhật thanh tiến độ & EXP trên Header
                     const headerText = document.getElementById('headerProgressText');
                     const headerBar = document.getElementById('headerProgressBar');
+                    const headerXp = document.getElementById('headerXpBadge');
                     if (headerText) {
                         headerText.textContent = `${data.overallProgressPercent}% (${data.completedLessonsCount}/${data.totalLessonsCount} bài)`;
                     }
                     if (headerBar) {
                         headerBar.style.width = `${data.overallProgressPercent}%`;
+                    }
+                    if (headerXp && typeof data.completedLessonsCount === 'number') {
+                        headerXp.textContent = `⚡ ${data.completedLessonsCount * 10} EXP`;
                     }
 
                     // Cập nhật trạng thái bài học và icon tích xanh trên Sidebar
@@ -381,10 +483,10 @@
                     datasets: [{
                         label: 'Năng lực hiện tại (%)',
                         data: chartData.skillScores,
-                        backgroundColor: 'rgba(249, 115, 22, 0.22)',
-                        borderColor: '#F97316',
-                        pointBackgroundColor: '#10B981',
-                        pointBorderColor: '#fff',
+                        backgroundColor: 'rgba(0, 240, 255, 0.18)',
+                        borderColor: '#00F0FF',
+                        pointBackgroundColor: '#A855F7',
+                        pointBorderColor: '#FFFFFF',
                         borderWidth: 2
                     }]
                 },
@@ -396,8 +498,8 @@
                             min: 0,
                             max: 100,
                             ticks: { stepSize: 20, color: '#94A3B8', backdropColor: 'transparent' },
-                            grid: { color: 'rgba(148, 163, 184, 0.2)' },
-                            angleLines: { color: 'rgba(148, 163, 184, 0.2)' },
+                            grid: { color: 'rgba(56, 189, 248, 0.2)' },
+                            angleLines: { color: 'rgba(56, 189, 248, 0.2)' },
                             pointLabels: { color: '#F8FAFC', font: { size: 12, weight: '600' } }
                         }
                     },
@@ -418,11 +520,12 @@
                         label: 'Số bài học con hoàn thành',
                         data: chartData.timelineCounts,
                         borderColor: '#10B981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.18)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.16)',
                         fill: true,
                         tension: 0.35,
                         pointRadius: 4,
-                        pointBackgroundColor: '#F97316'
+                        pointBackgroundColor: '#00F0FF',
+                        pointBorderColor: '#FFFFFF'
                     }]
                 },
                 options: {
@@ -449,19 +552,47 @@
     }
 
     // ------------------------------------------------------------------------
-    // 4. TRỢ LÝ ẢO 2D DUAL-MODE TIẾT KIỆM TOKEN (VIỆTBOT 2D)
+    // 4. TRỢ LÝ ẢO 2D/3D-READY DUAL-MODE TIẾT KIỆM TOKEN (VIỆTBOT)
     // ------------------------------------------------------------------------
     function formatMarkdownSimple(text) {
         if (!text) return '';
         return text
-            .replace(/```csharp([\s\S]*?)```/g, '<pre class="bg-black text-info p-2 rounded mt-1 mb-1 font-mono" style="font-size:0.78rem;"><code>$1</code></pre>')
-            .replace(/```([\s\S]*?)```/g, '<pre class="bg-black text-info p-2 rounded mt-1 mb-1 font-mono" style="font-size:0.78rem;"><code>$1</code></pre>')
+            .replace(/```csharp([\s\S]*?)```/g, '<pre class="bg-black text-info p-2 rounded mt-1 mb-1 font-mono border border-info border-opacity-25" style="font-size:0.78rem;"><code>$1</code></pre>')
+            .replace(/```([\s\S]*?)```/g, '<pre class="bg-black text-info p-2 rounded mt-1 mb-1 font-mono border border-info border-opacity-25" style="font-size:0.78rem;"><code>$1</code></pre>')
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/`([^`]+)`/g, '<code class="text-warning">$1</code>')
+            .replace(/`([^`]+)`/g, '<code class="hv-inline-code">$1</code>')
             .replace(/\n/g, '<br/>');
     }
 
     window.HoangVietMascot = {
+        setMood: function (mood) {
+            const dock = document.getElementById('globalAiMascotDock');
+            const viewport = document.getElementById('widgetMascotRenderViewport');
+            const mouth = document.getElementById('mascotMouthPath');
+
+            if (dock) {
+                dock.className = `ai-mascot-floating-dock mascot-mood-${mood || 'explaining'}`;
+            }
+            if (viewport) {
+                viewport.setAttribute('data-current-mood', mood || 'explaining');
+            }
+
+            // [3D-UPGRADE-HOOK]: Nơi gắn trigger đổi animation 3D sau này
+            if (window.HoangViet3DMascot && typeof window.HoangViet3DMascot.setWidgetMood === 'function') {
+                window.HoangViet3DMascot.setWidgetMood(mood);
+            }
+
+            if (mouth) {
+                if (mood === 'thinking') {
+                    mouth.setAttribute('d', 'M 51 61 L 69 61');
+                } else if (mood === 'interview') {
+                    mouth.setAttribute('d', 'M 50 60 Q 60 64 70 60');
+                } else {
+                    mouth.setAttribute('d', 'M 50 59 Q 60 66 70 59');
+                }
+            }
+        },
+
         toggleBubble: function (forceState) {
             const bubble = document.getElementById('mascotSpeechBubble');
             if (!bubble) return;
@@ -490,13 +621,14 @@
             const bubbleText = document.getElementById('mascotBubbleText');
 
             this.toggleBubble(true);
+            this.setMood('thinking');
             if (!bubbleText) return;
 
             const lessonCode = dock?.getAttribute('data-lesson-code') || '1.1';
             const lessonTitle = dock?.getAttribute('data-lesson-title') || '';
             const activeStepTitle = window.HoangVietFlow.getActiveStepTitle();
 
-            bubbleText.innerHTML = '<span class="text-warning"><i class="bi bi-hourglass-split me-1"></i>ViệtBot 2D đang tổng hợp câu trả lời...</span>';
+            bubbleText.innerHTML = '<span class="text-info"><i class="bi bi-hourglass-split me-1"></i>ViệtBot 2D đang tổng hợp câu trả lời...</span>';
 
             try {
                 const res = await fetch('/AIStudio/AskMentor', {
@@ -512,13 +644,38 @@
 
                 const data = await res.json();
                 if (data && data.reply) {
+                    this.setMood(data.mood || 'happy');
                     bubbleText.innerHTML = formatMarkdownSimple(data.reply);
                 }
             } catch {
+                this.setMood('explaining');
                 bubbleText.innerHTML = 'Hãy kiểm tra kết nối hoặc bấm lại vào một trong 3 nút gợi ý nhanh nhé!';
             }
         }
     };
+
+    // ------------------------------------------------------------------------
+    // 5. HIỆU ỨNG INTERACTIVE SPOTLIGHT TRACKING TRÊN CÁC THẺ BENTO & SECTION
+    // ------------------------------------------------------------------------
+    function initSpotlightCards() {
+        document.addEventListener('mousemove', function (e) {
+            const cards = document.querySelectorAll('.hv-bento-card, .cp-section-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                if (
+                    e.clientX >= rect.left - 100 &&
+                    e.clientX <= rect.right + 100 &&
+                    e.clientY >= rect.top - 100 &&
+                    e.clientY <= rect.bottom + 100
+                ) {
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                }
+            });
+        }, { passive: true });
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
         const firstStepBtn = document.querySelector('#interactiveFlowChain .flow-step-box.active')
@@ -527,5 +684,6 @@
             window.HoangVietFlow.selectStep(firstStepBtn);
         }
         initHomeCharts();
+        initSpotlightCards();
     });
 })();

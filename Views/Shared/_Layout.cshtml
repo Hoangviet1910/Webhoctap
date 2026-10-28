@@ -3,6 +3,7 @@
     var progressPercent = ViewData["OverallProgressPercent"] != null ? Convert.ToInt32(ViewData["OverallProgressPercent"]) : 0;
     var completedCount = ViewData["CompletedLessonsCount"] != null ? Convert.ToInt32(ViewData["CompletedLessonsCount"]) : 0;
     var totalCount = ViewData["TotalLessonsCount"] != null ? Convert.ToInt32(ViewData["TotalLessonsCount"]) : 0;
+    var totalExp = completedCount * 10;
 }
 <!DOCTYPE html>
 <html lang="vi" data-bs-theme="dark">
@@ -24,44 +25,44 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body class="minimalist-course-body">
-    <!-- ================= TOP HEADER ================= -->
+    <!-- ================= TOP COMMAND HEADER ================= -->
     <header class="cp-top-header">
         <div class="d-flex align-items-center gap-3">
             <a asp-controller="Home" asp-action="Index" asp-route-track="INTERN_TRACK" class="cp-brand-link">
                 <div class="cp-brand-logo">HV</div>
                 <div>
                     <div class="cp-brand-name">Hoàng Việt</div>
-                    <div class="cp-brand-sub">C# ASP.NET Core 10.0 Learning Platform</div>
+                    <div class="cp-brand-sub">SYS.NET10 // C# ENGINEER WORKSPACE</div>
                 </div>
             </a>
         </div>
 
         <!-- 2 MENU CHÍNH TÁCH BIỆT HOÀN TOÀN TRÊN HEADER -->
-        <nav class="cp-track-switcher">
+        <nav class="cp-track-switcher" aria-label="Chuyển đổi lộ trình học tập">
             <a asp-controller="Home" asp-action="Index" asp-route-track="INTERN_TRACK"
                class="cp-track-tab @(currentTrack == "INTERN_TRACK" ? "active" : "")">
-                <i class="bi bi-lightning-charge-fill me-1"></i>
+                <i class="bi bi-lightning-charge-fill"></i>
                 <span>Menu 1: Lộ trình Đi Thực Tập (5 Chủ đề cốt lõi - Đọc Code & Luồng BE/Web API)</span>
             </a>
             <a asp-controller="Home" asp-action="Index" asp-route-track="DETAILED_TRACK"
                class="cp-track-tab @(currentTrack == "DETAILED_TRACK" ? "active" : "")">
-                <i class="bi bi-journal-bookmark-fill me-1"></i>
+                <i class="bi bi-journal-bookmark-fill"></i>
                 <span>Menu 2: Lộ trình Học Chi Tiết (Đầy đủ 16 Chủ đề Fullstack .NET từ gốc)</span>
             </a>
         </nav>
 
-        <!-- THANH TIẾN ĐỘ TỔNG (MẶC ĐỊNH 0%) + NÚT THỐNG KÊ + NÚT PHÒNG MENTOR AI 2D -->
+        <!-- THANH TIẾN ĐỘ TỔNG + EXP TELEMETRY + NÚT THỐNG KÊ + NÚT PHÒNG MENTOR AI 2D -->
         <div class="d-flex align-items-center gap-2">
-            <div class="cp-overall-progress-box d-none d-xl-flex" title="Tiến độ hoàn thành khóa học">
-                <div class="d-flex justify-content-between align-items-center w-100 mb-1">
-                    <span class="small text-secondary">Tiến độ:</span>
-                    <span id="headerProgressText" class="font-mono fw-bold small text-success">
+            <div class="cp-overall-progress-box d-none d-xl-flex" title="Tiến độ hoàn thành khóa học & Điểm kinh nghiệm">
+                <div class="d-flex justify-content-between align-items-center w-100 mb-1 gap-2">
+                    <span id="headerXpBadge" class="hv-xp-pill">⚡ @totalExp EXP</span>
+                    <span id="headerProgressText" class="font-mono fw-bold small text-info">
                         @progressPercent% (@completedCount/@totalCount bài)
                     </span>
                 </div>
-                <div class="progress w-100" style="height: 6px; background: #0F172A;">
-                    <div id="headerProgressBar" class="progress-bar" role="progressbar"
-                         style="width: @(progressPercent)%; background: linear-gradient(90deg, #F97316, #10B981); transition: width 0.4s ease;">
+                <div class="progress w-100 hv-progress-track">
+                    <div id="headerProgressBar" class="progress-bar hv-progress-bar-neon" role="progressbar"
+                         style="width: @(progressPercent)%;">
                     </div>
                 </div>
             </div>
@@ -72,7 +73,7 @@
             </a>
 
             <a asp-controller="AIStudio" asp-action="Index"
-               class="btn btn-sm @(currentTrack == "AISTUDIO" ? "btn-hv-orange" : "btn-hv-outline") px-3 py-2">
+               class="btn btn-sm @(currentTrack == "AISTUDIO" ? "btn-hv-purple" : "btn-hv-outline") px-3 py-2">
                 <span>🤖 Phòng Mentor AI 2D</span>
             </a>
         </div>
